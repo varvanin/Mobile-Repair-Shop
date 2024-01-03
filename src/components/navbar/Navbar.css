@@ -1,0 +1,38 @@
+.nav-link-style {
+  text-decoration: none;
+  padding: 15px;
+  display: block;
+  text-align: center;
+  margin: 0.2rem;
+}
+
+.nav-link-style:hover {
+  background-color: rgb(134, 134, 240);
+  text-align: center;
+  transition: 0.3s;
+  border-radius: 15px;
+}
+
+.nav-link-style-lg {
+  margin-top: 0.7rem;
+  text-decoration: none;
+  padding: 15px;
+  display: block;
+  text-align: center;
+  margin: 0.2rem;
+}
+
+.nav-link-style-lg:hover {
+  background-color: rgb(197, 11, 11);
+  text-align: center;
+  transition: 0.3s;
+  border-radius: 15px;
+}
+
+.brandLogo {
+  padding: 10px;
+}
+.brandLogo:hover {
+  background-color: rgb(134, 134, 240);
+  border-radius: 15px;
+}

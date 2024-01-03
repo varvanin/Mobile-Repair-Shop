@@ -1,7 +1,7 @@
 import React from "react";
 import "./Login.css";
 
-function Login() {
+function ResetPassword() {
   return (
     <div className=" d-flex justify-content-center align-items-center vh-100 container-fluid bg-gray bg ">
       <div className="col-md-7 text-center shadow-lg rounded-top border-4 p-3 bg-white border-top border-bottom border-secondary  m-1">
@@ -17,7 +17,7 @@ function Login() {
               aria-describedby="emailHelp"
             />
             <div id="emailHelp" className="form-text">
-              We'll never share your email with anyone else.
+              Type your account's email address
             </div>
           </div>
           <div className="mb-3">
@@ -29,26 +29,21 @@ function Login() {
               className="form-control"
               id="exampleInputPassword1"
             />
+            <div id="emailHelp" className="form-text">
+              Type your new password
+            </div>
           </div>
 
-          <a
-            href="/home"
+          <button
             type="submit"
             className="btn btn-secondary ps-5 pe-5 me-3 d-inline  "
           >
-            Login
-          </a>
-
-          <a
-            href="/PwResetInstuction"
-            className="text-danger d-flex mt-2 align-items-start text-center "
-          >
-            Forget Password ?
-          </a>
+            Reset Password
+          </button>
         </form>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default ResetPassword;
