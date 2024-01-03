@@ -1,0 +1,13 @@
+.bg {
+  background-image: url("../../img//Login.jpg");
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+@media (max-width: 900px) {
+  .btn-login {
+    margin-bottom: 5px;
+  }
+}
