@@ -3,13 +3,11 @@ import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
 import AccountImg from "../../img/Logo.png";
 import "./Account.css";
-
 function Account() {
   return (
-    <>
-      {" "}
+    <div>
       <Navbar />
-      <div className="bg container-fluid d-flex flex-column min-vh-100 ">
+      <div className="bg1 container-fluid d-flex flex-column min-vh-100 ">
         <div className="content flex-grow-1 align-items-center my-5 mb-5">
           <div className="row justify-content-center  align-items-center my-4">
             <div className="col-12 col-md-4 text-center">
@@ -76,7 +74,7 @@ function Account() {
         </div>
         <Footer />
       </div>
-    </>
+    </div>
   );
 }
 
