@@ -7,6 +7,7 @@ function Home() {
     <div>
       <Navbar />
       <Hero />
+      <Card />
     </div>
   );
 }

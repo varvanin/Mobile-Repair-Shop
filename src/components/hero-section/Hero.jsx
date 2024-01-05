@@ -12,6 +12,10 @@ function Hero() {
               <div className="lead text-muted p-2">
                 Upload Your Repair Jobs and Easily Manage Them With Us !
               </div>
+              <div className="lead text-muted p-1">
+                Repair Status Notifications | Stock Management | Supplier
+                Management
+              </div>
             </h1>
             <div className="p-3">
               <button className="btn btn-primary text-center btn-lg ">
