@@ -9,9 +9,9 @@ function Account() {
     <>
       {" "}
       <Navbar />
-      <div className="bg container-fluid d-flex flex-column min-vh-100">
-        <div className="content flex-grow-1">
-          <div className="row justify-content-center align-items-center my-4">
+      <div className="bg container-fluid d-flex flex-column min-vh-100 ">
+        <div className="content flex-grow-1 align-items-center my-5 mb-5">
+          <div className="row justify-content-center  align-items-center my-4">
             <div className="col-12 col-md-4 text-center">
               <img
                 src={AccountImg}
