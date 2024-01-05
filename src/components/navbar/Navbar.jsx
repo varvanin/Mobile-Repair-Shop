@@ -6,7 +6,7 @@ function Navbar() {
     <nav class="navbar navbar-expand-md bg-body-tertiary " data-bs-theme="dark">
       <div class="container-lg">
         <a class="navbar-brand fw-bold brandLogo " href="/home">
-          Ease Repair
+          EaseRepair
         </a>
         <button
           class="navbar-toggler"
@@ -45,6 +45,14 @@ function Navbar() {
             <li class="nav-item">
               <a class="nav-link fw-bold  text-light nav-link-style" href="#">
                 Suppliers
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link fw-bold  text-light nav-link-style"
+                href="/account"
+              >
+                My Account
               </a>
             </li>
             <li class="nav-item">

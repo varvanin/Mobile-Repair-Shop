@@ -4,6 +4,7 @@ import Home from "./pages/home/Home";
 import Login from "./pages/logins/Login";
 import PwResetInstuction from "./pages/logins/PwResetInstuction";
 import ResetPassword from "./pages/logins/ResetPassword";
+import Account from "./pages/account/Account";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/PwResetInstuction" element={<PwResetInstuction />} />
         <Route path="/ResetPassword" element={<ResetPassword />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/account" element={<Account />} />
       </Routes>
     </div>
   );
