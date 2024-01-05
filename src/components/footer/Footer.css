@@ -1,0 +1,8 @@
+.footer-link {
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  transition: 0.5s;
+  text-decoration: underline;
+}
