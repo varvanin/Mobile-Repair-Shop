@@ -7,14 +7,14 @@ function Account() {
   return (
     <div>
       <Navbar />
-      <div className="bg1 container-fluid d-flex flex-column min-vh-100 ">
-        <div className="content flex-grow-1 align-items-center my-5 mb-5">
-          <div className="row justify-content-center  align-items-center my-4">
+      <div className="bg1">
+        <div className="container-fluid align-items-center   min-vh-100 ">
+          <div className="row justify-content-center align-items-center mt-5">
             <div className="col-12 col-md-4 text-center">
               <img
                 src={AccountImg}
                 alt=""
-                className="img-fluid rounded-5 ps-3"
+                className="img-fluid rounded-5 p-3 "
               />
             </div>
             <div className="col-12 col-md-8 my-4">
