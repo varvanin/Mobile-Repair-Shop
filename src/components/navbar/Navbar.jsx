@@ -41,8 +41,11 @@ function Navbar() {
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fw-bold  text-light nav-link-style" href="#">
-                Part
+              <a
+                class="nav-link fw-bold  text-light nav-link-style"
+                href="/parts"
+              >
+                Parts
               </a>
             </li>
             <li class="nav-item">
@@ -68,7 +71,7 @@ function Navbar() {
             </li>
           </ul>
           <div>
-            <a className="btn btn-primary d-none d-md-inline ms-4 rounded-start-pill ">
+            <a className="btn btn-primary d-none d-md-inline ms-4 rounded-start-pill  text-light">
               Update Jobs
             </a>
           </div>

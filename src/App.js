@@ -6,6 +6,7 @@ import PwResetInstuction from "./pages/logins/PwResetInstuction";
 import ResetPassword from "./pages/logins/ResetPassword";
 import Account from "./pages/account/Account";
 import Jobs from "./pages/jobs/Jobs";
+import Parts from "./pages/mobile-parts-management/Parts";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/account" element={<Account />} />
         <Route path="/jobs" element={<Jobs />} />
+        <Route path="/parts" element={<Parts />} />
       </Routes>
     </div>
   );
