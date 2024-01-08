@@ -8,7 +8,7 @@ function Account() {
     <div>
       <Navbar />
       <div className="bg1">
-        <div className="container-fluid align-items-center d-flex min-vh-100 ">
+        <div className="container-fluid align-items-center d-flex min-vh-100 ps-3 pe-3 ">
           <div className="row justify-content-center align-items-center mt-5">
             <div className="col-12 col-md-4 text-center">
               <img

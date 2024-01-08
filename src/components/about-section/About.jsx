@@ -4,8 +4,8 @@ import Accordion from "./Accordion";
 
 function About() {
   return (
-    <div className="container-md my-5">
-      <div className="row justify-centent-center text-center align-items-center shadow-lg">
+    <div className="container-md my-5 ">
+      <div className="row justify-centent-center text-center align-items-center shadow-lg p-5">
         <div className="text-center display-4 my-2">Why Choose Us ?</div>
         <div className="lead text-muted mb-4">
           Choose us for a reason not for the passsion

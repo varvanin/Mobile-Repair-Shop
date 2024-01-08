@@ -33,7 +33,10 @@ function Navbar() {
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fw-bold  text-light nav-link-style" href="#">
+              <a
+                class="nav-link fw-bold  text-light nav-link-style"
+                href="/jobs"
+              >
                 Jobs
               </a>
             </li>
@@ -65,14 +68,17 @@ function Navbar() {
             </li>
           </ul>
           <div>
-            <button className="btn btn-primary d-none d-md-inline ms-4 rounded-start-pill ">
+            <a className="btn btn-primary d-none d-md-inline ms-4 rounded-start-pill ">
               Update Jobs
-            </button>
+            </a>
           </div>
           <div>
-            <button className="btn btn-danger d-none d-md-inline  ms-4 rounded-3 rounded-top-3 ">
+            <a
+              className="btn btn-danger d-none d-md-inline  ms-4 rounded-3 rounded-top-3 "
+              href="/"
+            >
               Log out
-            </button>
+            </a>
           </div>
         </div>
       </div>
