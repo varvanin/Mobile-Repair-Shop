@@ -7,6 +7,7 @@ import ResetPassword from "./pages/logins/ResetPassword";
 import Account from "./pages/account/Account";
 import Jobs from "./pages/jobs/Jobs";
 import Parts from "./pages/mobile-parts-management/Parts";
+import Suppliers from "./pages/suppliers/Suppliers";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/jobs" element={<Jobs />} />
         <Route path="/parts" element={<Parts />} />
+        <Route path="/suppliers" element={<Suppliers />} />
       </Routes>
     </div>
   );
