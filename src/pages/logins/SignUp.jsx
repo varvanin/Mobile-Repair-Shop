@@ -1,27 +1,25 @@
 import React, { useState } from "react";
 import "./Login.css";
 import { supabase } from "../../config/supabaseClient";
-
-function Login() {
+function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  async function LoginUser() {
+  async function signUpUser() {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signUp({
         email: email,
         password: password,
       });
+
+      // Handle the result here
       if (error) {
-        alert("Something is wrong with your email or password");
+        console.error("Sign up error:", error.message);
       } else {
-        alert("Logged Succesfully");
+        alert("Sign up successful:", data);
       }
     } catch (error) {
-      console.error(
-        "unexpected error occur during login. Please wait sometime",
-        error
-      );
+      console.error("An unexpected error occurred:", error);
     }
   }
 
@@ -33,10 +31,11 @@ function Login() {
     setPassword(e.target.value);
   };
 
-  const handleLogin = (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
-    LoginUser();
+    signUpUser();
   };
+
   return (
     <div className=" d-flex justify-content-center align-items-center vh-100 container-fluid bg-gray bg ">
       <div className="col-md-7 text-center shadow-lg rounded-top border-4 p-3 bg-white border-top border-bottom border-secondary  m-1">
@@ -71,26 +70,12 @@ function Login() {
           </div>
 
           <a
-            onClick={handleLogin}
             href="/home"
             type="submit"
-            className="btn btn-secondary ps-5 pe-5 me-3 d-inline  "
+            className="btn btn-success ps-5 pe-5 me-3 d-inline "
+            onClick={handleRegister}
           >
-            Login
-          </a>
-
-          <a
-            href="/PwResetInstuction"
-            className="text-danger d-flex mt-2 align-items-start text-center "
-          >
-            Forget Password ?
-          </a>
-
-          <a
-            href="/SignUp"
-            className="text-success d-flex mt-2 align-items-start justify-content-end "
-          >
-            Not a Member ? Register Now !
+            Register
           </a>
         </form>
       </div>
@@ -98,4 +83,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default SignUp;

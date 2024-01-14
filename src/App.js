@@ -8,12 +8,14 @@ import Account from "./pages/account/Account";
 import Jobs from "./pages/jobs/Jobs";
 import Parts from "./pages/mobile-parts-management/Parts";
 import Suppliers from "./pages/suppliers/Suppliers";
+import SignUp from "./pages/logins/SignUp";
 
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/SignUp" element={<SignUp />} />
         <Route path="/PwResetInstuction" element={<PwResetInstuction />} />
         <Route path="/ResetPassword" element={<ResetPassword />} />
         <Route path="/home" element={<Home />} />
