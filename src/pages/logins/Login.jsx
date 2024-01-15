@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import "./Login.css";
 import { supabase } from "../../config/supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   async function LoginUser() {
     try {
@@ -16,6 +18,7 @@ function Login() {
         alert("Something is wrong with your email or password");
       } else {
         alert("Logged Succesfully");
+        navigate("/home");
       }
     } catch (error) {
       console.error(
