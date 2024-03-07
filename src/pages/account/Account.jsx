@@ -13,6 +13,7 @@ function Account() {
     address: "",
     contact: "",
   });
+  const [existingData, setExistingData] = useState(false); // New state to track existing data
 
   useEffect(() => {
     fetchShopData();
@@ -36,6 +37,7 @@ function Account() {
           address: data.address,
           contact: data.contact,
         });
+        setExistingData(true); // Set existingData to true if data is found
       }
     } catch (error) {
       console.error("Error fetching shop data:", error.message);
@@ -53,22 +55,26 @@ function Account() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Update Shop table with the modified data
-      const { error } = await supabase
-        .from("Shop")
-        .insert({
-          id: user.user.id,
-          ownerName: shopData.ownerName,
-          address: shopData.address,
-          contact: shopData.contact,
-        })
-        .eq("id", user.user.id);
+      if (!existingData) {
+        // Enable save button if no existing data
+        // Update Shop table with the modified data
+        const { error } = await supabase
+          .from("Shop")
+          .insert({
+            id: user.user.id,
+            ownerName: shopData.ownerName,
+            address: shopData.address,
+            contact: shopData.contact,
+          })
+          .eq("id", user.user.id);
 
-      if (error) {
-        throw error;
+        if (error) {
+          throw error;
+        }
+
+        console.log("Shop data updated successfully");
+        setExistingData(true); // Set existingData to true after saving data
       }
-
-      console.log("Shop data updated successfully");
     } catch (error) {
       console.error("Error updating shop data:", error.message);
     }
@@ -159,13 +165,18 @@ function Account() {
                   <label htmlFor="contact">Contact</label>
                 </div>
                 <div className="col-12">
-                  <button type="submit" className="btn btn-primary">
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={existingData}
+                  >
                     Save
                   </button>
                   <button
                     type="submit"
                     className="btn btn-primary"
                     onClick={handleUpdate}
+                    disabled={!existingData} // Disable update button if no existing data
                   >
                     Update
                   </button>
