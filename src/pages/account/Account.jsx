@@ -74,6 +74,29 @@ function Account() {
     }
   };
 
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      // Update the table with the modified data
+      const { error } = await supabase
+        .from("Shop")
+        .update({
+          ownerName: shopData.ownerName,
+          address: shopData.address,
+          contact: shopData.contact,
+        })
+        .eq("id", user.user.id);
+
+      if (error) {
+        throw error;
+      }
+
+      console.log("Shop data updated successfully");
+    } catch (error) {
+      console.error("Error updating shop data:", error.message);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -138,6 +161,13 @@ function Account() {
                 <div className="col-12">
                   <button type="submit" className="btn btn-primary">
                     Save
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    onClick={handleUpdate}
+                  >
+                    Update
                   </button>
                 </div>
               </form>
