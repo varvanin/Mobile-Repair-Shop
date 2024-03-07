@@ -1,12 +1,78 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
 import AccountImg from "../../img/Logo.png";
 import "./Account.css";
 import { useAuth } from "../../components/AuthContext";
+import { supabase } from "../../config/supabaseClient";
+
 function Account() {
   const { user } = useAuth();
-  console.log(user.user.id);
+  const [shopData, setShopData] = useState({
+    ownerName: "",
+    address: "",
+    contact: "",
+  });
+
+  useEffect(() => {
+    fetchShopData();
+  }, []);
+
+  const fetchShopData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("Shop")
+        .select("*")
+        .eq("id", user.user.id)
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        setShopData({
+          ownerName: data.ownerName,
+          address: data.address,
+          contact: data.contact,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching shop data:", error.message);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setShopData({
+      ...shopData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Update Shop table with the modified data
+      const { error } = await supabase
+        .from("Shop")
+        .insert({
+          id: user.user.id,
+          ownerName: shopData.ownerName,
+          address: shopData.address,
+          contact: shopData.contact,
+        })
+        .eq("id", user.user.id);
+
+      if (error) {
+        throw error;
+      }
+
+      console.log("Shop data updated successfully");
+    } catch (error) {
+      console.error("Error updating shop data:", error.message);
+    }
+  };
 
   return (
     <div>
@@ -22,13 +88,12 @@ function Account() {
               />
             </div>
             <div className="col-12 col-md-8 my-4">
-              <form action="" className="row g-3">
+              <form onSubmit={handleSubmit} className="row g-3">
                 <div className="form-floating mb-3 col-md-6">
                   <input
                     type="email"
                     className="form-control"
                     id="email"
-                    placeholder=""
                     value={user.user.email}
                     readOnly
                   />
@@ -39,20 +104,24 @@ function Account() {
                   <input
                     type="text"
                     className="form-control"
-                    id="OwnerName"
-                    placeholder=""
+                    id="ownerName"
+                    name="ownerName"
+                    value={shopData.ownerName}
+                    onChange={handleInputChange}
                   />
-                  <label htmlFor="OwnerName">Owner Name</label>
+                  <label htmlFor="ownerName">Owner Name</label>
                 </div>
 
                 <div className="form-floating mb-3 col-md-8">
                   <input
                     type="text"
                     className="form-control"
-                    id="Address"
-                    placeholder=""
+                    id="address"
+                    name="address"
+                    value={shopData.address}
+                    onChange={handleInputChange}
                   />
-                  <label htmlFor="Address">Address</label>
+                  <label htmlFor="address">Address</label>
                 </div>
 
                 <div className="form-floating mb-3 col-md-4">
@@ -60,18 +129,15 @@ function Account() {
                     type="text"
                     className="form-control"
                     id="contact"
-                    placeholder=""
+                    name="contact"
+                    value={shopData.contact}
+                    onChange={handleInputChange}
                   />
-                  <label htmlFor="contact" className="form-label">
-                    Contact
-                  </label>
+                  <label htmlFor="contact">Contact</label>
                 </div>
                 <div className="col-12">
                   <button type="submit" className="btn btn-primary">
                     Save
-                  </button>
-                  <button type="submit" className="btn btn-secondary ms-2">
-                    Edit
                   </button>
                 </div>
               </form>
