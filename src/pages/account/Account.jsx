@@ -3,7 +3,11 @@ import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
 import AccountImg from "../../img/Logo.png";
 import "./Account.css";
+import { useAuth } from "../../components/AuthContext";
 function Account() {
+  const { user } = useAuth();
+  console.log(user.user.id);
+
   return (
     <div>
       <Navbar />
@@ -25,8 +29,10 @@ function Account() {
                     className="form-control"
                     id="email"
                     placeholder=""
+                    value={user.user.email}
+                    readOnly
                   />
-                  <label htmlFor="email">Email address</label>
+                  <label htmlFor="email">Email Address</label>
                 </div>
 
                 <div className="form-floating mb-3 col-md-6">
