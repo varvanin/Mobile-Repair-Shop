@@ -164,7 +164,7 @@ function Account() {
                   />
                   <label htmlFor="contact">Contact</label>
                 </div>
-                <div className="col-12">
+                <div className="col-6">
                   <button
                     type="submit"
                     className="btn btn-primary"
@@ -172,9 +172,10 @@ function Account() {
                   >
                     Save
                   </button>
+
                   <button
                     type="submit"
-                    className="btn btn-primary"
+                    className="btn btn-primary mx-2"
                     onClick={handleUpdate}
                     disabled={!existingData} // Disable update button if no existing data
                   >
