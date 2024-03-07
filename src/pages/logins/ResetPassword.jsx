@@ -8,12 +8,12 @@ function ResetPassword() {
 
   async function ResetPassword() {
     try {
-      const { data, error } = await supabase.auth.updateUser({
+      const { error } = await supabase.auth.updateUser({
         email: email,
         password: password,
       });
       if (error) {
-        alert("Email is wrong ");
+        alert(error);
       } else {
         alert("Your password is changed");
       }

@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import "./Login.css";
 import { supabase } from "../../config/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../components/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   async function loginUser(e) {
     e.preventDefault();
     try {
-      const { user, error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -19,6 +21,8 @@ function Login() {
         alert("Something is wrong with your email or password");
       } else {
         alert("Logged Successfully");
+        login(data);
+        console.log(data);
         navigate("/home");
       }
     } catch (error) {

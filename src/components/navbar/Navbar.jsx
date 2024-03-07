@@ -9,6 +9,7 @@ function Navbar() {
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
+      localStorage.removeItem("user"); // Clear user data from local storage
       navigate("/");
     } catch (error) {
       console.error("Error logging out:", error.message);

@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Login from "./pages/logins/Login";
@@ -9,40 +8,14 @@ import Jobs from "./pages/jobs/Jobs";
 import Parts from "./pages/mobile-parts-management/Parts";
 import Suppliers from "./pages/suppliers/Suppliers";
 import SignUp from "./pages/logins/SignUp";
-import { supabase } from "./config/supabaseClient";
+import { useAuth } from "./components/AuthContext";
 
 function App() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        setUser(user);
-      } catch (error) {
-        setUser(null);
-      }
-    };
-
-    fetchUser();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        const currentUser = session?.user;
-        setUser(currentUser ?? null);
-      }
-    );
-
-    return () => {
-      authListener.unsubscribe();
-    };
-  }, []);
-
-  // Function to render the protected route or redirect to login
-  const renderProtectedRoute = (element) => {
+  const ProtectedRoute = ({ element, ...props }) => {
     return user ? element : <Navigate to="/" replace />;
+    console.log(user);
   };
 
   return (
@@ -53,13 +26,19 @@ function App() {
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/PwResetInstuction" element={<PwResetInstuction />} />
           <Route path="/ResetPassword" element={<ResetPassword />} />
-          <Route path="/home" element={renderProtectedRoute(<Home />)} />
-          <Route path="/account" element={renderProtectedRoute(<Account />)} />
-          <Route path="/jobs" element={renderProtectedRoute(<Jobs />)} />
-          <Route path="/parts" element={renderProtectedRoute(<Parts />)} />
+          <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
+          <Route
+            path="/account"
+            element={<ProtectedRoute element={<Account />} />}
+          />
+          <Route path="/jobs" element={<ProtectedRoute element={<Jobs />} />} />
+          <Route
+            path="/parts"
+            element={<ProtectedRoute element={<Parts />} />}
+          />
           <Route
             path="/suppliers"
-            element={renderProtectedRoute(<Suppliers />)}
+            element={<ProtectedRoute element={<Suppliers />} />}
           />
         </Routes>
       </BrowserRouter>
