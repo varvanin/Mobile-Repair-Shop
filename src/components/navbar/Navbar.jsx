@@ -1,7 +1,20 @@
 import React from "react";
 import "./Navbar.css";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../../config/supabaseClient";
 
 function Navbar() {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      navigate("/");
+    } catch (error) {
+      console.error("Error logging out:", error.message);
+    }
+  };
+
   return (
     <nav class="navbar navbar-expand-md bg-body-tertiary " data-bs-theme="dark">
       <div class="container-lg">
@@ -65,12 +78,12 @@ function Navbar() {
               </a>
             </li>
             <li class="nav-item">
-              <a
+              <button
                 class="nav-link fw-bold  text-light nav-link-style-lg d-md-none "
-                href="/"
+                onClick={handleLogout}
               >
                 Log Out
-              </a>
+              </button>
             </li>
           </ul>
           <div>
@@ -82,12 +95,12 @@ function Navbar() {
             </a>
           </div>
           <div>
-            <a
+            <button
               className="btn btn-danger d-none d-md-inline  ms-4 rounded-3 rounded-top-3 "
-              href="/"
+              onClick={handleLogout}
             >
               Log out
-            </a>
+            </button>
           </div>
         </div>
       </div>

@@ -8,23 +8,21 @@ function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  async function LoginUser() {
+  async function loginUser(e) {
+    e.preventDefault();
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
+      const { user, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
       if (error) {
         alert("Something is wrong with your email or password");
       } else {
-        alert("Logged Succesfully");
+        alert("Logged Successfully");
         navigate("/home");
       }
     } catch (error) {
-      console.error(
-        "unexpected error occur during login. Please wait sometime",
-        error
-      );
+      console.error("Unexpected error occurred during login.", error);
     }
   }
 
@@ -36,15 +34,11 @@ function Login() {
     setPassword(e.target.value);
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    LoginUser();
-  };
   return (
-    <div className=" d-flex justify-content-center align-items-center vh-100 container-fluid bg-gray bg ">
-      <div className="col-md-7 text-center shadow-lg rounded-top border-4 p-3 bg-white border-top border-bottom border-secondary  m-1">
-        <form className="p-5">
-          <div className="mb-3 ">
+    <div className="d-flex justify-content-center align-items-center vh-100 container-fluid bg-gray bg">
+      <div className="col-md-7 text-center shadow-lg rounded-top border-4 p-3 bg-white border-top border-bottom border-secondary m-1">
+        <form onSubmit={loginUser} className="p-5">
+          <div className="mb-3">
             <label htmlFor="exampleInputEmail1" className="form-label">
               Email address
             </label>
@@ -73,25 +67,23 @@ function Login() {
             />
           </div>
 
-          <a
-            onClick={handleLogin}
-            href="/home"
+          <button
             type="submit"
-            className="btn btn-secondary ps-5 pe-5 me-3 d-inline  "
+            className="btn btn-secondary ps-5 pe-5 me-3 d-inline"
           >
             Login
-          </a>
+          </button>
 
           <a
             href="/PwResetInstuction"
-            className="text-danger d-flex mt-2 align-items-start text-center "
+            className="text-danger d-flex mt-2 align-items-start text-center"
           >
             Forget Password ?
           </a>
 
           <a
             href="/SignUp"
-            className="text-success d-flex mt-2 align-items-start justify-content-end "
+            className="text-success d-flex mt-2 align-items-start justify-content-end"
           >
             Not a Member ? Register Now !
           </a>
