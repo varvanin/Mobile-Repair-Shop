@@ -59,11 +59,11 @@ function Account() {
                   <input
                     type="text"
                     className="form-control"
-                    id="City"
+                    id="contact"
                     placeholder=""
                   />
-                  <label htmlFor="City" className="form-label">
-                    City
+                  <label htmlFor="contact" className="form-label">
+                    Contact
                   </label>
                 </div>
                 <div className="col-12">
