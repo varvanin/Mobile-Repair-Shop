@@ -4,6 +4,7 @@ import Footer from "../../components/footer/Footer";
 import SupplierManagementImg from "../../img/SupplierManagement.jpg";
 import { useAuth } from "../../components/AuthContext";
 import { supabase } from "../../config/supabaseClient";
+import UpdateModal from "../../components/UpdateModal";
 
 function Suppliers() {
   const { user } = useAuth();
@@ -71,10 +72,20 @@ function Suppliers() {
     }
   };
 
-  const handleUpdate = async (id) => {
-    // Implement update functionality as per your requirement
-    // You can use a modal or a form to update supplier details
-    console.log("Update supplier with ID:", id);
+  const handleUpdate = async (updatedSupplier) => {
+    try {
+      const { data, error } = await supabase
+        .from("Supplier")
+        .update(updatedSupplier)
+        .eq("id", updatedSupplier.id);
+      if (error) {
+        throw error;
+      }
+      console.log("Data updated successfully:", data);
+      fetchSuppliers(); // Refresh the supplier list after update
+    } catch (error) {
+      console.error("Error updating data:", error.message);
+    }
   };
 
   return (
@@ -126,11 +137,17 @@ function Suppliers() {
                         Delete
                       </button>
                       <button
-                        className="btn btn-primary ms-2"
-                        onClick={() => handleUpdate(supplier.id)}
+                        type="button"
+                        className="btn btn-primary mx-2"
+                        data-bs-toggle="modal"
+                        data-bs-target={`#updateModal${supplier.id}`}
                       >
                         Update
                       </button>
+                      <UpdateModal
+                        supplier={supplier}
+                        onUpdate={handleUpdate}
+                      />
                     </td>
                   </tr>
                 ))}
