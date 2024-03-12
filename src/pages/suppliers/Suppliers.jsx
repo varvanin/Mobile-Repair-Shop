@@ -14,6 +14,7 @@ function Suppliers() {
     address: "",
   });
   const [suppliers, setSuppliers] = useState([]);
+  const [loading, setLoading] = useState(true); // State to track loading
 
   useEffect(() => {
     fetchSuppliers();
@@ -42,6 +43,7 @@ function Suppliers() {
 
   const fetchSuppliers = async () => {
     try {
+      setLoading(true); // Set loading to true while fetching
       const { data, error } = await supabase
         .from("Supplier")
         .select("id, supplierName, contact, address")
@@ -52,6 +54,8 @@ function Suppliers() {
       setSuppliers(data);
     } catch (error) {
       console.error("Error fetching suppliers:", error.message);
+    } finally {
+      setLoading(false); // Set loading to false when done fetching
     }
   };
 
@@ -107,52 +111,101 @@ function Suppliers() {
               Now with RepairEase you can easily Manage your supplier chain with
               just a few clicks!
             </div>
-            <form onSubmit={handleSubmit} className="row g-2 my-2 ms-4">
-              {/* Form inputs */}
+            <form onSubmit={handleSubmit} className="my-4">
+              <div className="mb-3">
+                <label htmlFor="supplierName" className="form-label">
+                  Supplier Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="supplierName"
+                  value={formData.supplierName}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="contact" className="form-label">
+                  Contact
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="contact"
+                  value={formData.contact}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="address" className="form-label">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <button type="submit" className="btn btn-primary">
+                Add Supplier
+              </button>
             </form>
           </div>
         </div>
         <div className="row justify-content-center align-items-center my-4">
           <div className="col-12 table-responsive">
-            <table className="table table-dark table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">Supplier Name</th>
-                  <th scope="col">Contact</th>
-                  <th scope="col">Address</th>
-                  <th scope="col">Actions</th> {/* New column for actions */}
-                </tr>
-              </thead>
-              <tbody>
-                {suppliers.map((supplier, index) => (
-                  <tr key={index}>
-                    <td>{supplier.supplierName}</td>
-                    <td>{supplier.contact}</td>
-                    <td>{supplier.address}</td>
-                    <td>
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => handleDelete(supplier.id)}
-                      >
-                        Delete
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-primary mx-2"
-                        data-bs-toggle="modal"
-                        data-bs-target={`#updateModal${supplier.id}`}
-                      >
-                        Update
-                      </button>
-                      <UpdateModal
-                        supplier={supplier}
-                        onUpdate={handleUpdate}
-                      />
-                    </td>
+            {loading ? ( // Display loading indicator if loading is true
+              <div className="text-center">
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            ) : (
+              <table className="table table-dark table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Supplier Name</th>
+                    <th scope="col">Contact</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Actions</th> {/* New column for actions */}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {suppliers.map((supplier, index) => (
+                    <tr key={index}>
+                      <td>{supplier.supplierName}</td>
+                      <td>{supplier.contact}</td>
+                      <td>{supplier.address}</td>
+                      <td>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => handleDelete(supplier.id)}
+                        >
+                          Delete
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-primary mx-2"
+                          data-bs-toggle="modal"
+                          data-bs-target={`#updateModal${supplier.id}`}
+                        >
+                          Update
+                        </button>
+                        <UpdateModal
+                          supplier={supplier}
+                          onUpdate={handleUpdate}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>
