@@ -113,10 +113,7 @@ function Suppliers() {
               just a few clicks!
             </div>
             <form onSubmit={handleSubmit} className="my-4">
-              <div className="mb-3">
-                <label htmlFor="supplierName" className="form-label">
-                  Supplier Name
-                </label>
+              <div className="mb-3 form-floating">
                 <input
                   type="text"
                   className="form-control"
@@ -124,12 +121,13 @@ function Suppliers() {
                   value={formData.supplierName}
                   onChange={handleInputChange}
                   required
+                  placeholder=""
                 />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="contact" className="form-label">
-                  Contact
+                <label htmlFor="supplierName" className="form-label">
+                  Supplier Name
                 </label>
+              </div>
+              <div className="mb-3 form-floating">
                 <input
                   type="text"
                   className="form-control"
@@ -137,12 +135,13 @@ function Suppliers() {
                   value={formData.contact}
                   onChange={handleInputChange}
                   required
+                  placeholder=""
                 />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="address" className="form-label">
-                  Address
+                <label htmlFor="contact" className="form-label">
+                  Contact
                 </label>
+              </div>
+              <div className="mb-3 form-floating">
                 <input
                   type="text"
                   className="form-control"
@@ -150,7 +149,11 @@ function Suppliers() {
                   value={formData.address}
                   onChange={handleInputChange}
                   required
+                  placeholder=""
                 />
+                <label htmlFor="address" className="form-label">
+                  Address
+                </label>
               </div>
               <button type="submit" className="btn btn-primary">
                 Add Supplier
