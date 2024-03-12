@@ -87,6 +87,7 @@ function Suppliers() {
       }
       alert("Data updated successfully:", data);
       fetchSuppliers(); // Refresh the supplier list after update
+      setLoading(false);
     } catch (error) {
       console.error("Error updating data:", error.message);
     }
