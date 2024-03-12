@@ -43,7 +43,7 @@ function Suppliers() {
     try {
       const { data, error } = await supabase
         .from("Supplier")
-        .select("supplierName, contact, address")
+        .select("id, supplierName, contact, address")
         .eq("shopId", user.user.id);
       if (error) {
         throw error;
@@ -56,6 +56,25 @@ function Suppliers() {
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const { error } = await supabase.from("Supplier").delete().eq("id", id);
+      if (error) {
+        throw error;
+      }
+      console.log("Supplier deleted successfully");
+      fetchSuppliers(); // Refresh the supplier list after deletion
+    } catch (error) {
+      console.error("Error deleting supplier:", error.message);
+    }
+  };
+
+  const handleUpdate = async (id) => {
+    // Implement update functionality as per your requirement
+    // You can use a modal or a form to update supplier details
+    console.log("Update supplier with ID:", id);
   };
 
   return (
@@ -78,45 +97,7 @@ function Suppliers() {
               just a few clicks!
             </div>
             <form onSubmit={handleSubmit} className="row g-2 my-2 ms-4">
-              <div className="form-floating mb-3 col-md-10">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="supplierName"
-                  placeholder=""
-                  value={formData.supplierName}
-                  onChange={handleInputChange}
-                />
-                <label htmlFor="supplierName">Supplier Name</label>
-              </div>
-              <div className="form-floating mb-3 col-md-10">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="contact"
-                  placeholder=""
-                  value={formData.contact}
-                  onChange={handleInputChange}
-                />
-                <label htmlFor="contact">Contact</label>
-              </div>
-              <div className="form-floating mb-3 col-md-10">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="address"
-                  placeholder=""
-                  value={formData.address}
-                  onChange={handleInputChange}
-                />
-                <label htmlFor="address">Address</label>
-              </div>
-
-              <div className="col-12">
-                <button type="submit" className="btn btn-primary ps-3 pe-3">
-                  Save
-                </button>
-              </div>
+              {/* Form inputs */}
             </form>
           </div>
         </div>
@@ -128,6 +109,7 @@ function Suppliers() {
                   <th scope="col">Supplier Name</th>
                   <th scope="col">Contact</th>
                   <th scope="col">Address</th>
+                  <th scope="col">Actions</th> {/* New column for actions */}
                 </tr>
               </thead>
               <tbody>
@@ -136,6 +118,20 @@ function Suppliers() {
                     <td>{supplier.supplierName}</td>
                     <td>{supplier.contact}</td>
                     <td>{supplier.address}</td>
+                    <td>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleDelete(supplier.id)}
+                      >
+                        Delete
+                      </button>
+                      <button
+                        className="btn btn-primary ms-2"
+                        onClick={() => handleUpdate(supplier.id)}
+                      >
+                        Update
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
