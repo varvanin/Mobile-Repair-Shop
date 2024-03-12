@@ -81,7 +81,7 @@ function Suppliers() {
       if (error) {
         throw error;
       }
-      console.log("Data updated successfully:", data);
+      alert("Data updated successfully:", data);
       fetchSuppliers(); // Refresh the supplier list after update
     } catch (error) {
       console.error("Error updating data:", error.message);
