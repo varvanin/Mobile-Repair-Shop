@@ -1,9 +1,63 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
 import SupplierManagementImg from "../../img/SupplierManagement.jpg";
+import { useAuth } from "../../components/AuthContext";
+import { supabase } from "../../config/supabaseClient";
 
 function Suppliers() {
+  const { user } = useAuth();
+  const [formData, setFormData] = useState({
+    supplierName: "",
+    contact: "",
+    address: "",
+  });
+  const [suppliers, setSuppliers] = useState([]);
+
+  useEffect(() => {
+    fetchSuppliers();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { data, error } = await supabase
+        .from("Supplier")
+        .insert([{ ...formData, shopId: user.user.id }]);
+      if (error) {
+        throw error;
+      }
+      console.log("Data inserted successfully:", data);
+      setFormData({
+        supplierName: "",
+        contact: "",
+        address: "",
+      });
+      fetchSuppliers(); // Refresh the supplier list after insertion
+    } catch (error) {
+      console.error("Error inserting data:", error.message);
+    }
+  };
+
+  const fetchSuppliers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("Supplier")
+        .select("supplierName, contact, address")
+        .eq("shopId", user.user.id);
+      if (error) {
+        throw error;
+      }
+      setSuppliers(data);
+    } catch (error) {
+      console.error("Error fetching suppliers:", error.message);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
   return (
     <>
       <Navbar />
@@ -18,20 +72,20 @@ function Suppliers() {
             />
           </div>
           <div className="col-12 col-md-7 text-center my-3 p-4">
-            <div className="display-6">
-              Store All You'r Suppliers and Manage
-            </div>
+            <div className="display-6">Store All Your Suppliers and Manage</div>
             <div className="lead text-muted">
-              Now with RepairEase you can easily Manage your you'r supplier
-              chain with just few clicks !
+              Now with RepairEase you can easily Manage your supplier chain with
+              just a few clicks!
             </div>
-            <form action="" className="row g-2 my-2 ms-4">
+            <form onSubmit={handleSubmit} className="row g-2 my-2 ms-4">
               <div className="form-floating mb-3 col-md-10">
                 <input
                   type="text"
                   className="form-control"
                   id="supplierName"
                   placeholder=""
+                  value={formData.supplierName}
+                  onChange={handleInputChange}
                 />
                 <label htmlFor="supplierName">Supplier Name</label>
               </div>
@@ -41,6 +95,8 @@ function Suppliers() {
                   className="form-control"
                   id="contact"
                   placeholder=""
+                  value={formData.contact}
+                  onChange={handleInputChange}
                 />
                 <label htmlFor="contact">Contact</label>
               </div>
@@ -50,6 +106,8 @@ function Suppliers() {
                   className="form-control"
                   id="address"
                   placeholder=""
+                  value={formData.address}
+                  onChange={handleInputChange}
                 />
                 <label htmlFor="address">Address</label>
               </div>
@@ -73,26 +131,13 @@ function Suppliers() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Mark</td>
-                  <td>771908671</td>
-                  <td>Galle 02 Road</td>
-                </tr>
-                <tr>
-                  <td>Elize</td>
-                  <td>771902411</td>
-                  <td>Matara</td>
-                </tr>
-                <tr>
-                  <td>Julia</td>
-                  <td>722511765</td>
-                  <td>Colombo</td>
-                </tr>
-                <tr>
-                  <td>Adam</td>
-                  <td>740455455</td>
-                  <td>Kandy</td>
-                </tr>
+                {suppliers.map((supplier, index) => (
+                  <tr key={index}>
+                    <td>{supplier.supplierName}</td>
+                    <td>{supplier.contact}</td>
+                    <td>{supplier.address}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
