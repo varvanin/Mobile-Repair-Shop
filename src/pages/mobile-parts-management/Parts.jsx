@@ -153,15 +153,13 @@ function Parts() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tbody>
-                    {parts.map((part, index) => (
-                      <tr key={index}>
-                        <td>{part.partName}</td>
-                        <td>{part.price}</td>
-                        <td>{part.quantity}</td>
-                      </tr>
-                    ))}
-                  </tbody>
+                  {parts.map((part, index) => (
+                    <tr key={index}>
+                      <td>{part.partName}</td>
+                      <td>{part.price}</td>
+                      <td>{part.quantity}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             )}
