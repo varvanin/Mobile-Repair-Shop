@@ -67,6 +67,19 @@ function Parts() {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const { error } = await supabase.from("Parts").delete().eq("id", id);
+      if (error) {
+        throw error;
+      }
+
+      fetchParts();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -150,6 +163,7 @@ function Parts() {
                     <th scope="col">Part Name</th>
                     <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -158,6 +172,14 @@ function Parts() {
                       <td>{part.partName}</td>
                       <td>{part.price}</td>
                       <td>{part.quantity}</td>
+                      <td>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => handleDelete(part.id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
