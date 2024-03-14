@@ -17,13 +17,16 @@ function Navbar() {
   };
 
   return (
-    <nav class="navbar navbar-expand-md bg-body-tertiary " data-bs-theme="dark">
-      <div class="container-lg">
-        <a class="navbar-brand fw-bold brandLogo " href="/home">
+    <nav
+      className="navbar navbar-expand-md bg-body-tertiary "
+      data-bs-theme="dark"
+    >
+      <div className="container-lg">
+        <a className="navbar-brand fw-bold brandLogo " href="/home">
           EaseRepair
         </a>
         <button
-          class="navbar-toggler"
+          className="navbar-toggler shadow-none border-0"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
@@ -31,56 +34,56 @@ function Navbar() {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon"></span>
         </button>
         <div
-          class="collapse navbar-collapse justify-content-end"
+          className="collapse navbar-collapse justify-content-end"
           id="navbarNav"
         >
-          <ul class="navbar-nav  ">
-            <li class="nav-item">
+          <ul className="navbar-nav  ">
+            <li className="nav-item">
               <a
-                class="nav-link fw-bold text-light nav-link-style"
+                className="nav-link fw-bold text-light nav-link-style"
                 href="/home"
               >
                 Home
               </a>
             </li>
-            <li class="nav-item">
+            <li className="nav-item">
               <a
-                class="nav-link fw-bold  text-light nav-link-style"
+                className="nav-link fw-bold  text-light nav-link-style"
                 href="/jobs"
               >
                 Jobs
               </a>
             </li>
-            <li class="nav-item">
+            <li className="nav-item">
               <a
-                class="nav-link fw-bold  text-light nav-link-style"
+                className="nav-link fw-bold  text-light nav-link-style"
                 href="/parts"
               >
                 Parts
               </a>
             </li>
-            <li class="nav-item">
+            <li className="nav-item">
               <a
-                class="nav-link fw-bold  text-light nav-link-style"
+                className="nav-link fw-bold  text-light nav-link-style"
                 href="/suppliers"
               >
                 Suppliers
               </a>
             </li>
-            <li class="nav-item">
+            <li className="nav-item">
               <a
-                class="nav-link fw-bold  text-light nav-link-style"
+                className="nav-link fw-bold  text-light nav-link-style"
                 href="/account"
               >
                 My Account
               </a>
             </li>
-            <li class="nav-item">
+            <li className="nav-item">
               <button
-                class="nav-link fw-bold  text-light nav-link-style-lg d-md-none "
+                className="nav-link fw-bold  text-light nav-link-style-lg d-md-none "
                 onClick={handleLogout}
               >
                 Log Out
@@ -97,7 +100,7 @@ function Navbar() {
           </div>
           <div>
             <button
-              className="btn btn-danger d-none d-md-inline  ms-4 rounded-3 rounded-top-3 "
+              className="btn btn-danger d-none d-md-inline  ms-4 rounded-3 rounded-top-3 m-4"
               onClick={handleLogout}
             >
               Log out

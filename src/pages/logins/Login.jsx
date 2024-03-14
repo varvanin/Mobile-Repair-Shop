@@ -87,7 +87,7 @@ function Login() {
 
           <a
             href="/SignUp"
-            className="text-success d-flex mt-2 align-items-start justify-content-end"
+            className="text-success d-flex mt-2 align-items-centerjustify-content-end"
           >
             Not a Member ? Register Now !
           </a>
