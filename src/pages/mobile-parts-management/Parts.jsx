@@ -148,6 +148,16 @@ function Parts() {
     }
   };
 
+  useEffect(() => {
+    if (selectedPart) {
+      setFormData({
+        partName: selectedPart.partName,
+        quantity: selectedPart.quantity,
+        price: selectedPart.price,
+      });
+    }
+  }, [selectedPart]);
+
   return (
     <>
       <Navbar />

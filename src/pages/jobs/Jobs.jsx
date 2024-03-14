@@ -27,6 +27,7 @@ function Jobs() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const [selectedJob, setSelectedJob] = useState(null);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -41,27 +42,27 @@ function Jobs() {
   const validateForm = (formData) => {
     let errors = {};
 
-    if (!formData.customerName.trim()) {
+    if (!formData.customerName) {
       errors.customerName = "Customer name is required";
     }
 
-    if (!formData.date.trim()) {
+    if (!formData.date) {
       errors.date = "Date is required";
     }
 
-    if (!formData.contact.trim()) {
+    if (!formData.contact) {
       errors.contact = "Contact number is required";
     }
 
-    if (!formData.deviceName.trim()) {
+    if (!formData.deviceName) {
       errors.deviceName = "Device name is required";
     }
 
-    if (!formData.fault.trim()) {
+    if (!formData.fault) {
       errors.fault = "Device fault is required";
     }
 
-    if (!formData.charge.trim()) {
+    if (!formData.charge) {
       errors.charge = "Charge for the repair is required";
     }
 
@@ -166,6 +167,54 @@ function Jobs() {
     }
   };
 
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validate form fields
+    const validationErrors = validateForm(formData);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from("Repairs")
+        .update(formData)
+        .eq("id", selectedJob.id);
+      if (error) {
+        throw error;
+      }
+
+      console.log("Data updated successfully:");
+      setSelectedJob(null);
+      setFormData({
+        customerName: "",
+        date: "",
+        contact: "",
+        deviceName: "",
+        fault: "",
+        charge: "",
+      });
+      fetchJobs();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedJob) {
+      setFormData({
+        customerName: selectedJob.customerName,
+        date: selectedJob.date,
+        contact: selectedJob.contact,
+        deviceName: selectedJob.deviceName,
+        fault: selectedJob.fault,
+        charge: selectedJob.charge,
+      });
+    }
+  }, [selectedJob]);
+
   return (
     <>
       <Navbar />
@@ -184,106 +233,214 @@ function Jobs() {
             <div className="lead text-muted">
               Add all of your jobs and manage them easily with us
             </div>
-            <form
-              action=""
-              className="row g-3 my-2 ms-4"
-              onSubmit={handleSubmit}
-            >
-              <div className="form-floating mb-3 col-md-10">
-                <input
-                  type="text"
-                  className={`form-control ${
-                    errors.customerName && "is-invalid"
-                  }`}
-                  id="customerName"
-                  placeholder=""
-                  value={formData.customerName}
-                  onChange={handleInputChange}
-                />
-                <label htmlFor="customerName">Customer Name</label>
-                {errors.customerName && (
-                  <div className="invalid-feedback">{errors.customerName}</div>
-                )}
-              </div>
+            {selectedJob && (
+              <form
+                action=""
+                className="row g-3 my-2 ms-4"
+                onSubmit={handleUpdate}
+              >
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className={`form-control ${
+                      errors.customerName && "is-invalid"
+                    }`}
+                    id="customerName"
+                    placeholder=""
+                    value={formData.customerName}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="customerName">Customer Name</label>
+                  {errors.customerName && (
+                    <div className="invalid-feedback">
+                      {errors.customerName}
+                    </div>
+                  )}
+                </div>
 
-              <div className="form-floating mb-3 col-md-10">
-                <input
-                  type="date"
-                  className={`form-control ${errors.date && "is-invalid"}`}
-                  id="date"
-                  placeholder=""
-                  value={formData.date}
-                  onChange={handleInputChange}
-                />
-                <label htmlFor="date">Date</label>
-                {errors.date && (
-                  <div className="invalid-feedback">{errors.date}</div>
-                )}
-              </div>
-              <div className="form-floating mb-3 col-md-10">
-                <input
-                  type="text"
-                  className={`form-control ${errors.contact && "is-invalid"}`}
-                  id="contact"
-                  placeholder=""
-                  value={formData.contact}
-                  onChange={handleInputChange}
-                />
-                <label htmlFor="contact">Contact Number</label>
-                {errors.contact && (
-                  <div className="invalid-feedback">{errors.contact}</div>
-                )}
-              </div>
-              <div className="form-floating mb-3 col-md-10">
-                <input
-                  type="text"
-                  className={`form-control ${
-                    errors.deviceName && "is-invalid"
-                  }`}
-                  id="deviceName"
-                  placeholder=""
-                  value={formData.deviceName}
-                  onChange={handleInputChange}
-                />
-                <label htmlFor="deviceName">Device Name</label>
-                {errors.deviceName && (
-                  <div className="invalid-feedback">{errors.deviceName}</div>
-                )}
-              </div>
-              <div className="form-floating mb-3 col-md-10">
-                <input
-                  type="text"
-                  className={`form-control ${errors.fault && "is-invalid"}`}
-                  id="fault"
-                  placeholder=""
-                  value={formData.fault}
-                  onChange={handleInputChange}
-                />
-                <label htmlFor="fault">Fault</label>
-                {errors.fault && (
-                  <div className="invalid-feedback">{errors.fault}</div>
-                )}
-              </div>
-              <div className="form-floating mb-3 col-md-10">
-                <input
-                  type="text"
-                  className={`form-control ${errors.charge && "is-invalid"}`}
-                  id="charge"
-                  placeholder=""
-                  value={formData.charge}
-                  onChange={handleInputChange}
-                />
-                <label htmlFor="charge">Charge</label>
-                {errors.charge && (
-                  <div className="invalid-feedback">{errors.charge}</div>
-                )}
-              </div>
-              <div className="col-12">
-                <button type="submit" className="btn btn-primary ps-3 pe-3">
-                  Submit
-                </button>
-              </div>
-            </form>
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="date"
+                    className={`form-control ${errors.date && "is-invalid"}`}
+                    id="date"
+                    placeholder=""
+                    value={formData.date}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="date">Date</label>
+                  {errors.date && (
+                    <div className="invalid-feedback">{errors.date}</div>
+                  )}
+                </div>
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className={`form-control ${errors.contact && "is-invalid"}`}
+                    id="contact"
+                    placeholder=""
+                    value={formData.contact}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="contact">Contact Number</label>
+                  {errors.contact && (
+                    <div className="invalid-feedback">{errors.contact}</div>
+                  )}
+                </div>
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className={`form-control ${
+                      errors.deviceName && "is-invalid"
+                    }`}
+                    id="deviceName"
+                    placeholder=""
+                    value={formData.deviceName}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="deviceName">Device Name</label>
+                  {errors.deviceName && (
+                    <div className="invalid-feedback">{errors.deviceName}</div>
+                  )}
+                </div>
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className={`form-control ${errors.fault && "is-invalid"}`}
+                    id="fault"
+                    placeholder=""
+                    value={formData.fault}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="fault">Fault</label>
+                  {errors.fault && (
+                    <div className="invalid-feedback">{errors.fault}</div>
+                  )}
+                </div>
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className={`form-control ${errors.charge && "is-invalid"}`}
+                    id="charge"
+                    placeholder=""
+                    value={formData.charge}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="charge">Charge</label>
+                  {errors.charge && (
+                    <div className="invalid-feedback">{errors.charge}</div>
+                  )}
+                </div>
+                <div className="col-12">
+                  <button type="submit" className="btn btn-primary ps-3 pe-3">
+                    Update
+                  </button>
+                </div>
+              </form>
+            )}
+            {!selectedJob && (
+              <form
+                action=""
+                className="row g-3 my-2 ms-4"
+                onSubmit={handleSubmit}
+              >
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className={`form-control ${
+                      errors.customerName && "is-invalid"
+                    }`}
+                    id="customerName"
+                    placeholder=""
+                    value={formData.customerName}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="customerName">Customer Name</label>
+                  {errors.customerName && (
+                    <div className="invalid-feedback">
+                      {errors.customerName}
+                    </div>
+                  )}
+                </div>
+
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="date"
+                    className={`form-control ${errors.date && "is-invalid"}`}
+                    id="date"
+                    placeholder=""
+                    value={formData.date}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="date">Date</label>
+                  {errors.date && (
+                    <div className="invalid-feedback">{errors.date}</div>
+                  )}
+                </div>
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className={`form-control ${errors.contact && "is-invalid"}`}
+                    id="contact"
+                    placeholder=""
+                    value={formData.contact}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="contact">Contact Number</label>
+                  {errors.contact && (
+                    <div className="invalid-feedback">{errors.contact}</div>
+                  )}
+                </div>
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className={`form-control ${
+                      errors.deviceName && "is-invalid"
+                    }`}
+                    id="deviceName"
+                    placeholder=""
+                    value={formData.deviceName}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="deviceName">Device Name</label>
+                  {errors.deviceName && (
+                    <div className="invalid-feedback">{errors.deviceName}</div>
+                  )}
+                </div>
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className={`form-control ${errors.fault && "is-invalid"}`}
+                    id="fault"
+                    placeholder=""
+                    value={formData.fault}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="fault">Fault</label>
+                  {errors.fault && (
+                    <div className="invalid-feedback">{errors.fault}</div>
+                  )}
+                </div>
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className={`form-control ${errors.charge && "is-invalid"}`}
+                    id="charge"
+                    placeholder=""
+                    value={formData.charge}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="charge">Charge</label>
+                  {errors.charge && (
+                    <div className="invalid-feedback">{errors.charge}</div>
+                  )}
+                </div>
+                <div className="col-12">
+                  <button type="submit" className="btn btn-primary ps-3 pe-3">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
         <div className="row justify-content-center align-items-center my-4">
@@ -337,6 +494,13 @@ function Jobs() {
                           onClick={() => handleDelete(job.id)}
                         >
                           Delete
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-primary mx-2"
+                          onClick={() => setSelectedJob(job)}
+                        >
+                          Update
                         </button>
                       </td>
                     </tr>
