@@ -153,6 +153,19 @@ function Jobs() {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const { error } = await supabase.from("Repairs").delete().eq("id", id);
+      if (error) {
+        throw error;
+      }
+      console.log("Job deleted successfully");
+      fetchJobs();
+    } catch (error) {
+      console.error("Error deleting Job:", error.message);
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -292,6 +305,7 @@ function Jobs() {
                     <th scope="col">Fault</th>
                     <th scope="col">Charge</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -316,6 +330,14 @@ function Jobs() {
                           <option value="Completed">Completed</option>
                           <option value="Failed">Failed</option>
                         </select>
+                      </td>
+                      <td>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => handleDelete(job.id)}
+                        >
+                          Delete
+                        </button>
                       </td>
                     </tr>
                   ))}
