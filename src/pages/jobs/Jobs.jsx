@@ -125,6 +125,33 @@ function Jobs() {
     }
   };
 
+  const handleStatusUpdate = async (jobId, newStatus) => {
+    try {
+      const { data, error } = await supabase
+        .from("Repairs")
+        .update({ status: newStatus })
+        .eq("id", jobId)
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      // Assuming you want to update the jobs state after successful update
+      const updatedJobs = jobs.map((job) => {
+        if (job.id === jobId) {
+          return { ...job, status: newStatus };
+        }
+        return job;
+      });
+      setJobs(updatedJobs);
+
+      console.log("Status updated successfully");
+    } catch (error) {
+      console.error("Error updating status:", error.message);
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -270,7 +297,20 @@ function Jobs() {
                       <td>{job.deviceName}</td>
                       <td>{job.fault}</td>
                       <td>{job.charge}</td>
-                      <td>{job.status}</td>
+                      <td>
+                        <select
+                          className="form-select"
+                          value={job.status}
+                          onChange={(e) =>
+                            handleStatusUpdate(job.id, e.target.value)
+                          }
+                        >
+                          <option value="Pending">Pending</option>
+                          <option value="Started">Started</option>
+                          <option value="Completed">Completed</option>
+                          <option value="Failed">Failed</option>
+                        </select>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
