@@ -176,7 +176,7 @@ function Suppliers() {
                     <th scope="col">Supplier Name</th>
                     <th scope="col">Contact</th>
                     <th scope="col">Address</th>
-                    <th scope="col">Actions</th> {/* New column for actions */}
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody>

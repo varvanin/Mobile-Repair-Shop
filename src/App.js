@@ -15,7 +15,6 @@ function App() {
 
   const ProtectedRoute = ({ element, ...props }) => {
     return user ? element : <Navigate to="/" replace />;
-    console.log(user);
   };
 
   return (
