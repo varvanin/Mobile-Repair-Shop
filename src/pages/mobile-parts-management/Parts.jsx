@@ -51,7 +51,7 @@ function Parts() {
       setLoading(true);
       const { data, error } = await supabase
         .from("Parts")
-        .select("id", "partName", "price", "quantity")
+        .select("id, partName, price, quantity")
         .eq("shopId", user.user.id);
 
       if (error) {
@@ -66,8 +66,6 @@ function Parts() {
       setLoading(false);
     }
   };
-
-  console.log("Parts:", parts);
 
   return (
     <>
@@ -104,7 +102,7 @@ function Parts() {
                   onChange={handleInputChange}
                   value={formData.partName}
                 />
-                <label htmlFor="aame">Part Name</label>
+                <label htmlFor="partName">Part Name</label>
               </div>
               <div className="form-floating mb-3 col-md-10">
                 <input
@@ -138,7 +136,7 @@ function Parts() {
           </div>
         </div>
         <div className="row justify-content-center align-items-center my-4">
-          <div className="col-12 text-center table-responsive">
+          <div className="col-12 table-responsive">
             {loading ? (
               <div className="text-center">
                 <div className="spinner-border" role="status">
@@ -155,13 +153,15 @@ function Parts() {
                   </tr>
                 </thead>
                 <tbody>
-                  {parts.map((part, index) => (
-                    <tr key={index}>
-                      <td>{part.partName}</td>
-                      <td>{part.price}</td>
-                      <td>{part.quantity}</td>
-                    </tr>
-                  ))}
+                  <tbody>
+                    {parts.map((part, index) => (
+                      <tr key={index}>
+                        <td>{part.partName}</td>
+                        <td>{part.price}</td>
+                        <td>{part.quantity}</td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </tbody>
               </table>
             )}
