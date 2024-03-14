@@ -13,6 +13,11 @@ function Suppliers() {
     contact: "",
     address: "",
   });
+  const [formErrors, setFormErrors] = useState({
+    supplierName: "",
+    contact: "",
+    address: "",
+  });
   const [suppliers, setSuppliers] = useState([]);
   const [loading, setLoading] = useState(true); // State to track loading
 
@@ -22,22 +27,24 @@ function Suppliers() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const { data, error } = await supabase
-        .from("Supplier")
-        .insert([{ ...formData, shopId: user.user.id }]);
-      if (error) {
-        throw error;
+    if (validateForm()) {
+      try {
+        const { data, error } = await supabase
+          .from("Supplier")
+          .insert([{ ...formData, shopId: user.user.id }]);
+        if (error) {
+          throw error;
+        }
+        console.log("Data inserted successfully:", data);
+        setFormData({
+          supplierName: "",
+          contact: "",
+          address: "",
+        });
+        fetchSuppliers(); // Refresh the supplier list after insertion
+      } catch (error) {
+        console.error("Error inserting data:", error.message);
       }
-      console.log("Data inserted successfully:", data);
-      setFormData({
-        supplierName: "",
-        contact: "",
-        address: "",
-      });
-      fetchSuppliers(); // Refresh the supplier list after insertion
-    } catch (error) {
-      console.error("Error inserting data:", error.message);
     }
   };
 
@@ -93,6 +100,36 @@ function Suppliers() {
     }
   };
 
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {
+      supplierName: "",
+      contact: "",
+      address: "",
+    };
+
+    if (!formData.supplierName.trim()) {
+      errors.supplierName = "Supplier Name is required";
+      isValid = false;
+    }
+
+    if (!formData.contact.trim()) {
+      errors.contact = "Contact is required";
+      isValid = false;
+    } else if (!/^\d{10}$/.test(formData.contact.trim())) {
+      errors.contact = "Contact must be a 10-digit number";
+      isValid = false;
+    }
+
+    if (!formData.address.trim()) {
+      errors.address = "Address is required";
+      isValid = false;
+    }
+
+    setFormErrors(errors);
+    return isValid;
+  };
+
   return (
     <>
       <Navbar />
@@ -116,44 +153,52 @@ function Suppliers() {
               <div className="mb-3 form-floating">
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${
+                    formErrors.supplierName ? "is-invalid" : ""
+                  }`}
                   id="supplierName"
                   value={formData.supplierName}
                   onChange={handleInputChange}
-                  required
                   placeholder=""
                 />
                 <label htmlFor="supplierName" className="form-label">
                   Supplier Name
                 </label>
+                <div className="invalid-feedback">
+                  {formErrors.supplierName}
+                </div>
               </div>
               <div className="mb-3 form-floating">
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${
+                    formErrors.contact ? "is-invalid" : ""
+                  }`}
                   id="contact"
                   value={formData.contact}
                   onChange={handleInputChange}
-                  required
                   placeholder=""
                 />
                 <label htmlFor="contact" className="form-label">
                   Contact
                 </label>
+                <div className="invalid-feedback">{formErrors.contact}</div>
               </div>
               <div className="mb-3 form-floating">
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${
+                    formErrors.address ? "is-invalid" : ""
+                  }`}
                   id="address"
                   value={formData.address}
                   onChange={handleInputChange}
-                  required
                   placeholder=""
                 />
                 <label htmlFor="address" className="form-label">
                   Address
                 </label>
+                <div className="invalid-feedback">{formErrors.address}</div>
               </div>
               <button type="submit" className="btn btn-primary">
                 Add Supplier
