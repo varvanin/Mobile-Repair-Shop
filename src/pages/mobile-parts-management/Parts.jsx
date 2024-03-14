@@ -15,17 +15,29 @@ function Parts() {
 
   const [parts, setParts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     fetchParts();
   }, []);
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+    // Clear previous errors when user starts typing
+    setErrors({ ...errors, [id]: "" });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate form fields
+    const validationErrors = validateForm(formData);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from("Parts")
@@ -58,26 +70,36 @@ function Parts() {
         throw error;
       }
 
-      console.log("Fetched parts:", data); // Log fetched data
+      console.log("Fetched parts:", data);
       setParts(data);
     } catch (error) {
-      console.log("Error fetching parts:", error); // Log any errors
+      console.log("Error fetching parts:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      const { error } = await supabase.from("Parts").delete().eq("id", id);
-      if (error) {
-        throw error;
-      }
+  const validateForm = (formData) => {
+    let errors = {};
 
-      fetchParts();
-    } catch (error) {
-      console.log(error.message);
+    if (!formData.partName.trim()) {
+      errors.partName = "Part Name is required";
     }
+
+    if (!formData.quantity.trim()) {
+      errors.quantity = "Quantity is required";
+    } else if (!/^\d+$/.test(formData.quantity.trim())) {
+      errors.quantity = "Quantity must be a number";
+    }
+
+    if (!formData.price.trim()) {
+      errors.price = "Price is required";
+    } else if (!/^\d+(\.\d{1,2})?$/.test(formData.price.trim())) {
+      errors.price =
+        "Price must be a valid number with up to two decimal places";
+    }
+
+    return errors;
   };
 
   return (
@@ -109,35 +131,48 @@ function Parts() {
               <div className="form-floating mb-3 col-md-10">
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${
+                    errors.partName ? "is-invalid" : ""
+                  }`}
                   id="partName"
                   placeholder=""
                   onChange={handleInputChange}
                   value={formData.partName}
                 />
                 <label htmlFor="partName">Part Name</label>
+                {errors.partName && (
+                  <div className="invalid-feedback">{errors.partName}</div>
+                )}
               </div>
               <div className="form-floating mb-3 col-md-10">
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${
+                    errors.quantity ? "is-invalid" : ""
+                  }`}
                   id="quantity"
                   placeholder=""
                   onChange={handleInputChange}
                   value={formData.quantity}
                 />
                 <label htmlFor="quantity">Quantity</label>
+                {errors.quantity && (
+                  <div className="invalid-feedback">{errors.quantity}</div>
+                )}
               </div>
               <div className="form-floating mb-3 col-md-10">
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${errors.price ? "is-invalid" : ""}`}
                   id="price"
                   placeholder=""
                   onChange={handleInputChange}
                   value={formData.price}
                 />
                 <label htmlFor="price">Price</label>
+                {errors.price && (
+                  <div className="invalid-feedback">{errors.price}</div>
+                )}
               </div>
 
               <div className="col-12">
@@ -163,7 +198,6 @@ function Parts() {
                     <th scope="col">Part Name</th>
                     <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
-                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -172,14 +206,6 @@ function Parts() {
                       <td>{part.partName}</td>
                       <td>{part.price}</td>
                       <td>{part.quantity}</td>
-                      <td>
-                        <button
-                          className="btn btn-danger"
-                          onClick={() => handleDelete(part.id)}
-                        >
-                          Delete
-                        </button>
-                      </td>
                     </tr>
                   ))}
                 </tbody>
