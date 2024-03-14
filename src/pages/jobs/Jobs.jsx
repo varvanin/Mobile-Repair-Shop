@@ -179,7 +179,9 @@ function Jobs() {
               <div className="form-floating mb-3 col-md-10">
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${
+                    errors.customerName && "is-invalid"
+                  }`}
                   id="customerName"
                   placeholder=""
                   value={formData.customerName}
@@ -190,10 +192,11 @@ function Jobs() {
                   <div className="invalid-feedback">{errors.customerName}</div>
                 )}
               </div>
+
               <div className="form-floating mb-3 col-md-10">
                 <input
                   type="date"
-                  className="form-control"
+                  className={`form-control ${errors.date && "is-invalid"}`}
                   id="date"
                   placeholder=""
                   value={formData.date}
@@ -207,7 +210,7 @@ function Jobs() {
               <div className="form-floating mb-3 col-md-10">
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${errors.contact && "is-invalid"}`}
                   id="contact"
                   placeholder=""
                   value={formData.contact}
@@ -221,7 +224,9 @@ function Jobs() {
               <div className="form-floating mb-3 col-md-10">
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${
+                    errors.deviceName && "is-invalid"
+                  }`}
                   id="deviceName"
                   placeholder=""
                   value={formData.deviceName}
@@ -235,7 +240,7 @@ function Jobs() {
               <div className="form-floating mb-3 col-md-10">
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${errors.fault && "is-invalid"}`}
                   id="fault"
                   placeholder=""
                   value={formData.fault}
@@ -249,7 +254,7 @@ function Jobs() {
               <div className="form-floating mb-3 col-md-10">
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${errors.charge && "is-invalid"}`}
                   id="charge"
                   placeholder=""
                   value={formData.charge}
