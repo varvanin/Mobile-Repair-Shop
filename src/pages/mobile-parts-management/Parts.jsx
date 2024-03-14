@@ -174,38 +174,50 @@ function Parts() {
                 <div className="form-floating mb-3 col-md-10">
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${
+                      errors.partName ? "is-invalid" : ""
+                    }`}
                     id="partName"
                     placeholder=""
                     onChange={handleInputChange}
                     value={formData.partName}
-                    required
                   />
                   <label htmlFor="partName">Part Name</label>
+                  {errors.partName && (
+                    <div className="invalid-feedback">{errors.partName}</div>
+                  )}
                 </div>
                 <div className="form-floating mb-3 col-md-10">
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${
+                      errors.quantity ? "is-invalid" : ""
+                    }`}
                     id="quantity"
                     placeholder=""
                     onChange={handleInputChange}
                     value={formData.quantity}
-                    required
                   />
                   <label htmlFor="quantity">Quantity</label>
+                  {errors.quantity && (
+                    <div className="invalid-feedback">{errors.quantity}</div>
+                  )}
                 </div>
                 <div className="form-floating mb-3 col-md-10">
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${
+                      errors.price ? "is-invalid" : ""
+                    }`}
                     id="price"
                     placeholder=""
                     onChange={handleInputChange}
                     value={formData.price}
-                    required
                   />
                   <label htmlFor="price">Price</label>
+                  {errors.price && (
+                    <div className="invalid-feedback">{errors.price}</div>
+                  )}
                 </div>
                 <div className="col-12">
                   <button type="submit" className="btn btn-primary ps-3 pe-3">
@@ -214,6 +226,7 @@ function Parts() {
                 </div>
               </form>
             )}
+
             {!selectedPart && (
               <form className="row g-2 my-2 ms-4" onSubmit={handleSubmit}>
                 <div className="form-floating mb-3 col-md-10">
