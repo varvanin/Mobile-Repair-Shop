@@ -16,6 +16,7 @@ function Parts() {
   const [parts, setParts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
+  const [selectedPart, setSelectedPart] = useState(null);
 
   useEffect(() => {
     fetchParts();
@@ -115,6 +116,38 @@ function Parts() {
     }
   };
 
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validate form fields
+    const validationErrors = validateForm(formData);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from("Parts")
+        .update(formData)
+        .eq("id", selectedPart.id);
+      if (error) {
+        throw error;
+      }
+
+      console.log("Data updated successfully:");
+      setSelectedPart(null);
+      setFormData({
+        partName: "",
+        quantity: "",
+        price: "",
+      });
+      fetchParts();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -136,64 +169,110 @@ function Parts() {
               Store your Repair parts/accessories in EaseRepair and Manage them
               with no stress
             </div>
-            <form
-              action=""
-              className="row g-2 my-2 ms-4"
-              onSubmit={handleSubmit}
-            >
-              <div className="form-floating mb-3 col-md-10">
-                <input
-                  type="text"
-                  className={`form-control ${
-                    errors.partName ? "is-invalid" : ""
-                  }`}
-                  id="partName"
-                  placeholder=""
-                  onChange={handleInputChange}
-                  value={formData.partName}
-                />
-                <label htmlFor="partName">Part Name</label>
-                {errors.partName && (
-                  <div className="invalid-feedback">{errors.partName}</div>
-                )}
-              </div>
-              <div className="form-floating mb-3 col-md-10">
-                <input
-                  type="text"
-                  className={`form-control ${
-                    errors.quantity ? "is-invalid" : ""
-                  }`}
-                  id="quantity"
-                  placeholder=""
-                  onChange={handleInputChange}
-                  value={formData.quantity}
-                />
-                <label htmlFor="quantity">Quantity</label>
-                {errors.quantity && (
-                  <div className="invalid-feedback">{errors.quantity}</div>
-                )}
-              </div>
-              <div className="form-floating mb-3 col-md-10">
-                <input
-                  type="text"
-                  className={`form-control ${errors.price ? "is-invalid" : ""}`}
-                  id="price"
-                  placeholder=""
-                  onChange={handleInputChange}
-                  value={formData.price}
-                />
-                <label htmlFor="price">Price</label>
-                {errors.price && (
-                  <div className="invalid-feedback">{errors.price}</div>
-                )}
-              </div>
+            {selectedPart && (
+              <form onSubmit={handleUpdate}>
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="partName"
+                    placeholder=""
+                    onChange={handleInputChange}
+                    value={formData.partName}
+                  />
+                  <label htmlFor="partName">Part Name</label>
+                </div>
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="quantity"
+                    placeholder=""
+                    onChange={handleInputChange}
+                    value={formData.quantity}
+                  />
+                  <label htmlFor="quantity">Quantity</label>
+                </div>
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="price"
+                    placeholder=""
+                    onChange={handleInputChange}
+                    value={formData.price}
+                  />
+                  <label htmlFor="price">Price</label>
+                </div>
+                <div className="col-12">
+                  <button type="submit" className="btn btn-primary ps-3 pe-3">
+                    Update
+                  </button>
+                </div>
+              </form>
+            )}
+            {!selectedPart && (
+              <form
+                action=""
+                className="row g-2 my-2 ms-4"
+                onSubmit={handleSubmit}
+              >
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className={`form-control ${
+                      errors.partName ? "is-invalid" : ""
+                    }`}
+                    id="partName"
+                    placeholder=""
+                    onChange={handleInputChange}
+                    value={formData.partName}
+                  />
+                  <label htmlFor="partName">Part Name</label>
+                  {errors.partName && (
+                    <div className="invalid-feedback">{errors.partName}</div>
+                  )}
+                </div>
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className={`form-control ${
+                      errors.quantity ? "is-invalid" : ""
+                    }`}
+                    id="quantity"
+                    placeholder=""
+                    onChange={handleInputChange}
+                    value={formData.quantity}
+                  />
+                  <label htmlFor="quantity">Quantity</label>
+                  {errors.quantity && (
+                    <div className="invalid-feedback">{errors.quantity}</div>
+                  )}
+                </div>
+                <div className="form-floating mb-3 col-md-10">
+                  <input
+                    type="text"
+                    className={`form-control ${
+                      errors.price ? "is-invalid" : ""
+                    }`}
+                    id="price"
+                    placeholder=""
+                    onChange={handleInputChange}
+                    value={formData.price}
+                  />
+                  <label htmlFor="price">Price</label>
+                  {errors.price && (
+                    <div className="invalid-feedback">{errors.price}</div>
+                  )}
+                </div>
 
-              <div className="col-12">
-                <button type="submit" className="btn btn-primary ps-3 pe-3">
-                  Save
-                </button>
-              </div>
-            </form>
+                <div className="col-12">
+                  <button type="submit" className="btn btn-primary ps-3 pe-3">
+                    Save
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
         <div className="row justify-content-center align-items-center my-4">
@@ -225,6 +304,13 @@ function Parts() {
                           onClick={() => handleDelete(part.id)}
                         >
                           Delete
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-primary mx-2"
+                          onClick={() => setSelectedPart(part)}
+                        >
+                          Update
                         </button>
                       </td>
                     </tr>
