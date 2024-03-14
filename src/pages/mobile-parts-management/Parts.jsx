@@ -15,7 +15,7 @@ function Parts() {
 
   const [parts, setParts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState([]);
   const [selectedPart, setSelectedPart] = useState(null);
 
   useEffect(() => {
