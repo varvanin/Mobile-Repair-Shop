@@ -170,7 +170,7 @@ function Parts() {
               with no stress
             </div>
             {selectedPart && (
-              <form onSubmit={handleUpdate}>
+              <form onSubmit={handleUpdate} className="row g-2 my-2 ms-4">
                 <div className="form-floating mb-3 col-md-10">
                   <input
                     type="text"
@@ -179,6 +179,7 @@ function Parts() {
                     placeholder=""
                     onChange={handleInputChange}
                     value={formData.partName}
+                    required
                   />
                   <label htmlFor="partName">Part Name</label>
                 </div>
@@ -190,6 +191,7 @@ function Parts() {
                     placeholder=""
                     onChange={handleInputChange}
                     value={formData.quantity}
+                    required
                   />
                   <label htmlFor="quantity">Quantity</label>
                 </div>
@@ -201,6 +203,7 @@ function Parts() {
                     placeholder=""
                     onChange={handleInputChange}
                     value={formData.price}
+                    required
                   />
                   <label htmlFor="price">Price</label>
                 </div>
@@ -212,11 +215,7 @@ function Parts() {
               </form>
             )}
             {!selectedPart && (
-              <form
-                action=""
-                className="row g-2 my-2 ms-4"
-                onSubmit={handleSubmit}
-              >
+              <form className="row g-2 my-2 ms-4" onSubmit={handleSubmit}>
                 <div className="form-floating mb-3 col-md-10">
                   <input
                     type="text"
