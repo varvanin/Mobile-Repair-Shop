@@ -9,8 +9,7 @@
 .nav-link-style:hover {
   background-color: rgb(134, 134, 240);
   text-align: center;
-  transition: 0.3s;
-  border-radius: 15px;
+  transition: 0.6s ease-in-out;
 }
 
 .nav-link-style-lg {
@@ -20,13 +19,6 @@
   display: block;
   text-align: center;
   margin: 0.2rem;
-}
-
-.nav-link-style-lg:hover {
-  background-color: rgb(197, 11, 11);
-  text-align: center;
-  transition: 0.3s;
-  border-radius: 15px;
 }
 
 .brandLogo {

@@ -83,10 +83,10 @@ function Navbar() {
             </li>
             <li className="nav-item">
               <button
-                className="nav-link fw-bold  text-light nav-link-style-lg d-md-none "
+                className="nav-link fw-bold  text-white  nav-link-style-lg d-md-none "
                 onClick={handleLogout}
               >
-                Log Out
+                LOG OUT
               </button>
             </li>
           </ul>
@@ -100,7 +100,7 @@ function Navbar() {
           </div>
           <div>
             <button
-              className="btn btn-danger d-none d-md-inline  ms-4 rounded-3 rounded-top-3 m-4"
+              className="btn btn-danger d-none d-md-inline  ms-4 rounded-3 rounded-top-3 p-2"
               onClick={handleLogout}
             >
               Log out
