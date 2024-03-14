@@ -9,6 +9,7 @@ import Parts from "./pages/mobile-parts-management/Parts";
 import Suppliers from "./pages/suppliers/Suppliers";
 import SignUp from "./pages/logins/SignUp";
 import { useAuth } from "./components/AuthContext";
+import NotFound from "./pages/not-found/NotFound";
 
 function App() {
   const { user } = useAuth();
@@ -39,6 +40,7 @@ function App() {
             path="/suppliers"
             element={<ProtectedRoute element={<Suppliers />} />}
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
