@@ -41,27 +41,27 @@ function Jobs() {
   const validateForm = (formData) => {
     let errors = {};
 
-    if (!formData.customerName) {
+    if (!formData.customerName.trim()) {
       errors.customerName = "Customer name is required";
     }
 
-    if (!formData.date) {
+    if (!formData.date.trim()) {
       errors.date = "Date is required";
     }
 
-    if (!formData.contact) {
+    if (!formData.contact.trim()) {
       errors.contact = "Contact number is required";
     }
 
-    if (!formData.deviceName) {
+    if (!formData.deviceName.trim()) {
       errors.deviceName = "Device name is required";
     }
 
-    if (!formData.fault) {
+    if (!formData.fault.trim()) {
       errors.fault = "Device fault is required";
     }
 
-    if (!formData.charge) {
+    if (!formData.charge.trim()) {
       errors.charge = "Charge for the repair is required";
     }
 
@@ -96,6 +96,7 @@ function Jobs() {
       });
 
       console.log("Data inserted successfully");
+      fetchJobs();
     } catch (error) {
       console.log(error.message);
     }
@@ -170,7 +171,11 @@ function Jobs() {
             <div className="lead text-muted">
               Add all of your jobs and manage them easily with us
             </div>
-            <form action="" className="row g-3 my-2 ms-4">
+            <form
+              action=""
+              className="row g-3 my-2 ms-4"
+              onSubmit={handleSubmit}
+            >
               <div className="form-floating mb-3 col-md-10">
                 <input
                   type="text"
@@ -256,11 +261,7 @@ function Jobs() {
                 )}
               </div>
               <div className="col-12">
-                <button
-                  type="submit"
-                  className="btn btn-primary ps-3 pe-3"
-                  onClick={handleSubmit}
-                >
+                <button type="submit" className="btn btn-primary ps-3 pe-3">
                   Submit
                 </button>
               </div>
