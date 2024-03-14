@@ -5,6 +5,7 @@ import JobsImg from "../../img/Jobs.jpg";
 import "./Jobs.css";
 import { supabase } from "../../config/supabaseClient";
 import { useAuth } from "../../components/AuthContext";
+import { useEffect } from "react";
 
 function Jobs() {
   const [formData, setFormData] = useState({
@@ -32,6 +33,10 @@ function Jobs() {
     setFormData({ ...formData, [id]: value });
     setErrors({ ...errors, [id]: "" });
   };
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
 
   const validateForm = (formData) => {
     let errors = {};
@@ -66,7 +71,6 @@ function Jobs() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate the form fields
     const validationErrors = validateForm(formData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -97,6 +101,30 @@ function Jobs() {
     }
   };
 
+  const fetchJobs = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("Repairs")
+        .select(
+          "id, customerName, date, deviceName,fault,charge,status,contact"
+        )
+        .eq("repairId", user.user.id);
+
+      if (error) {
+        throw error;
+      }
+
+      console.log(data);
+
+      setJobs(data);
+    } catch (error) {
+      console.log("Error fetching Jobs:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -115,11 +143,7 @@ function Jobs() {
             <div className="lead text-muted">
               Add all of your jobs and manage them easily with us
             </div>
-            <form
-              action=""
-              className="row g-3 my-2 ms-4"
-              onSubmit={handleSubmit}
-            >
+            <form action="" className="row g-3 my-2 ms-4">
               <div className="form-floating mb-3 col-md-10">
                 <input
                   type="text"
@@ -205,7 +229,11 @@ function Jobs() {
                 )}
               </div>
               <div className="col-12">
-                <button type="submit" className="btn btn-primary ps-3 pe-3">
+                <button
+                  type="submit"
+                  className="btn btn-primary ps-3 pe-3"
+                  onClick={handleSubmit}
+                >
                   Submit
                 </button>
               </div>
@@ -214,20 +242,40 @@ function Jobs() {
         </div>
         <div className="row justify-content-center align-items-center my-4">
           <div className="col-12 text-center table-responsive">
-            <table className="table table-dark table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">Customer Name</th>
-                  <th scope="col">Date</th>
-                  <th scope="col">Contact Number</th>
-                  <th scope="col">Device Name</th>
-                  <th scope="col">Fault</th>
-                  <th scope="col">Charge</th>
-                  <th scope="col">Status</th>
-                </tr>
-              </thead>
-              <tbody>{/* Populate with data from state */}</tbody>
-            </table>
+            {loading ? (
+              <div className="text-center">
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            ) : (
+              <table className="table table-dark table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Customer Name</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Contact Number</th>
+                    <th scope="col">Device Name</th>
+                    <th scope="col">Fault</th>
+                    <th scope="col">Charge</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {jobs.map((job, index) => (
+                    <tr key={index}>
+                      <td>{job.customerName}</td>
+                      <td>{job.date}</td>
+                      <td>{job.contact}</td>
+                      <td>{job.deviceName}</td>
+                      <td>{job.fault}</td>
+                      <td>{job.charge}</td>
+                      <td>{job.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>
