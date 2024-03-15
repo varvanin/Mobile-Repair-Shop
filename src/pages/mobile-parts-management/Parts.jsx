@@ -22,6 +22,16 @@ function Parts() {
     fetchParts();
   }, []);
 
+  useEffect(() => {
+    fetchParts();
+    // Convert price and quantity to strings
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      price: String(prevFormData.price),
+      quantity: String(prevFormData.quantity),
+    }));
+  }, []);
+
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
@@ -87,22 +97,29 @@ function Parts() {
       errors.partName = "Part Name is required";
     }
 
-    if (!formData.quantity.trim()) {
-      errors.quantity = "Quantity is required";
-    } else if (!/^\d+$/.test(formData.quantity.trim())) {
-      errors.quantity = "Quantity must be a number";
+    // Perform trim only if formData.quantity is a string
+    if (typeof formData.quantity === "string") {
+      formData.quantity = formData.quantity.trim();
+      if (!formData.quantity) {
+        errors.quantity = "Quantity is required";
+      } else if (!/^\d+$/.test(formData.quantity)) {
+        errors.quantity = "Quantity must be a number";
+      }
     }
 
-    if (!formData.price.trim()) {
-      errors.price = "Price is required";
-    } else if (!/^\d+(\.\d{1,2})?$/.test(formData.price.trim())) {
-      errors.price =
-        "Price must be a valid number with up to two decimal places";
+    // Perform trim only if formData.price is a string
+    if (typeof formData.price === "string") {
+      formData.price = formData.price.trim();
+      if (!formData.price) {
+        errors.price = "Price is required";
+      } else if (!/^\d+(\.\d{1,2})?$/.test(formData.price)) {
+        errors.price =
+          "Price must be a valid number with up to two decimal places";
+      }
     }
 
     return errors;
   };
-
   const handleDelete = async (id) => {
     try {
       const { error } = await supabase.from("Parts").delete().eq("id", id);
@@ -152,8 +169,8 @@ function Parts() {
     if (selectedPart) {
       setFormData({
         partName: selectedPart.partName,
-        quantity: selectedPart.quantity,
         price: selectedPart.price,
+        quantity: selectedPart.quantity,
       });
     }
   }, [selectedPart]);
