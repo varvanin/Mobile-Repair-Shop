@@ -58,7 +58,14 @@ function Suppliers() {
       if (error) {
         throw error;
       }
-      setSuppliers(data);
+
+      // Convert contact numbers to string
+      const suppliersWithStrings = data.map((supplier) => ({
+        ...supplier,
+        contact: String(supplier.contact),
+      }));
+
+      setSuppliers(suppliersWithStrings);
     } catch (error) {
       console.error("Error fetching suppliers:", error.message);
     } finally {
@@ -113,11 +120,20 @@ function Suppliers() {
       isValid = false;
     }
 
-    if (!formData.contact.trim()) {
+    if (!formData.contact) {
       errors.contact = "Contact is required";
       isValid = false;
-    } else if (!/^\d{10}$/.test(formData.contact.trim())) {
-      errors.contact = "Contact must be a 10-digit number";
+    } else if (
+      typeof formData.contact === "string" &&
+      !formData.contact.trim()
+    ) {
+      errors.contact = "Contact must not be empty";
+      isValid = false;
+    } else if (
+      typeof formData.contact === "string" &&
+      !/^\d{9}$/.test(formData.contact.trim())
+    ) {
+      errors.contact = "Contact must be a 09-digit number";
       isValid = false;
     }
 

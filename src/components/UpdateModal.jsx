@@ -36,8 +36,8 @@ function UpdateModal({ supplier, onUpdate }) {
     if (!updatedSupplier.contact.trim()) {
       errors.contact = "Contact is required";
       isValid = false;
-    } else if (!/^\d{10}$/.test(updatedSupplier.contact.trim())) {
-      errors.contact = "Contact must be a 10-digit number";
+    } else if (!/^\d{9}$/.test(updatedSupplier.contact.trim())) {
+      errors.contact = "Contact must be a 09-digit number";
       isValid = false;
     }
 
