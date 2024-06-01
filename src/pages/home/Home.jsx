@@ -1,7 +1,17 @@
+import Navbar from "../../components/navbar/Navbar";
+import Hero from "../../components/hero-section/Hero";
+import Card from "../../components/card-section/Card";
+import About from "../../components/about-section/About";
+import Footer from "../../components/footer/Footer";
+
 function Home() {
   return (
     <div>
-      <h1>This is Home page</h1>
+      <Navbar />
+      <Hero />
+      <Card />
+      <About />
+      <Footer />
     </div>
   );
 }
