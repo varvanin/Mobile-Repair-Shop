@@ -6,6 +6,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 REACT_APP_SUPABASE_URL
 REACT_APP_SUPABASE_KEY
+REACT_APP_USER_ID
+REACT_APP_SENDER_ID
+
+### `For the sms functionality of the project is from https://app.notify.lk/ also it's free`
 
 ## Available Scripts
 

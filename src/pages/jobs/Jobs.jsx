@@ -166,7 +166,7 @@ function Jobs() {
       toast.success("Status updated successfully");
       const job = jobs.find((job) => job.id === jobId);
       await sendSms(
-        `Dear ${job.customerName} Your job status of the ${job.deviceName}has been updated to ${newStatus}`,
+        `Dear ${job.customerName} Your job status of the ${job.deviceName} has been updated to ${newStatus}`,
         job.contact
       );
     } catch (error) {
