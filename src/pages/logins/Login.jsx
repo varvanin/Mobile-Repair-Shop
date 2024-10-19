@@ -3,30 +3,37 @@ import "./Login.css";
 import { supabase } from "../../config/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../components/AuthContext";
+import toast from "react-hot-toast";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [isLoading, setLoading] = useState(false);
 
   async function loginUser(e) {
     e.preventDefault();
     try {
+      setLoading(true);
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       if (error) {
-        alert("Something is wrong with your email or password");
+        toast.error("Something is wrong with your email or password");
       } else {
-        alert("Logged Successfully");
+        toast.success("Logged Successfully");
         login(data);
         console.log(data);
         navigate("/home");
       }
     } catch (error) {
       console.error("Unexpected error occurred during login.", error);
+    } finally {
+      setEmail("");
+      setPassword("");
+      setLoading(false);
     }
   }
 
@@ -75,7 +82,7 @@ function Login() {
             type="submit"
             className="btn btn-secondary ps-5 pe-5 me-3 d-inline"
           >
-            Login
+            {isLoading ? "Loading..." : "Login"}
           </button>
 
           <a

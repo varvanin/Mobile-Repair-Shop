@@ -4,6 +4,7 @@ import Footer from "../../components/footer/Footer";
 import AccessoriesImg from "../../img/mobile-phone-accessories.webp";
 import { useAuth } from "../../components/AuthContext";
 import { supabase } from "../../config/supabaseClient";
+import toast from "react-hot-toast";
 
 function Parts() {
   const { user } = useAuth();
@@ -17,6 +18,7 @@ function Parts() {
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState([]);
   const [selectedPart, setSelectedPart] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchParts();
@@ -41,7 +43,7 @@ function Parts() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     // Validate form fields
     const validationErrors = validateForm(formData);
     if (Object.keys(validationErrors).length > 0) {
@@ -55,9 +57,12 @@ function Parts() {
         .insert([{ ...formData, shopId: user.user.id }]);
       if (error) {
         throw error;
+        toast.error("Error inserting data");
+        console.log("Error inserting data:");
       }
 
       console.log("Data inserted successfully:");
+      toast.success("Data inserted successfully");
       setFormData({
         partName: "",
         quantity: "",
@@ -66,6 +71,9 @@ function Parts() {
       fetchParts();
     } catch (error) {
       console.log(error);
+      toast.error("Error inserting data");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -126,15 +134,17 @@ function Parts() {
       if (error) {
         throw error;
       }
-      console.log("Supplier deleted successfully");
+      toast.success("Supplier deleted successfully");
       fetchParts();
     } catch (error) {
       console.error("Error deleting supplier:", error.message);
+      toast.error("Error deleting supplier");
     }
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     // Validate form fields
     const validationErrors = validateForm(formData);
@@ -150,9 +160,12 @@ function Parts() {
         .eq("id", selectedPart.id);
       if (error) {
         throw error;
+        toast.error("Error updating data");
+        console.log("Error updating data:", error);
       }
 
       console.log("Data updated successfully:");
+      toast.success("Data updated successfully");
       setSelectedPart(null);
       setFormData({
         partName: "",
@@ -162,6 +175,9 @@ function Parts() {
       fetchParts();
     } catch (error) {
       console.log(error);
+      toast.error("Error updating data");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -248,7 +264,7 @@ function Parts() {
                 </div>
                 <div className="col-12">
                   <button type="submit" className="btn btn-primary ps-3 pe-3">
-                    Update
+                    {isLoading ? "Updating..." : "Update"}
                   </button>
                 </div>
               </form>
@@ -307,7 +323,7 @@ function Parts() {
 
                 <div className="col-12">
                   <button type="submit" className="btn btn-primary ps-3 pe-3">
-                    Save
+                    {isLoading ? "Saving..." : "Save"}
                   </button>
                 </div>
               </form>

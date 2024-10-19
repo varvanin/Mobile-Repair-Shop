@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import "./Login.css";
 import { supabase } from "../../config/supabaseClient";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   async function signUpUser() {
+    setLoading(true);
     try {
       const { data, error } = await supabase.auth.signUp({
         email: email,
@@ -15,11 +20,18 @@ function SignUp() {
       // Handle the result here
       if (error) {
         console.error("Sign up error:", error.message);
+        toast.error("Sign up error:", error.message);
       } else {
-        alert("Sign up successful:", data);
+        toast.success("Sign up successful");
+        navigate("/");
       }
     } catch (error) {
       console.error("An unexpected error occurred:", error);
+      toast.error("An unexpected error occurred:");
+    } finally {
+      setLoading(false);
+      setEmail("");
+      setPassword("");
     }
   }
 
@@ -75,7 +87,7 @@ function SignUp() {
             className="btn btn-success ps-5 pe-5 me-3 d-inline "
             onClick={handleRegister}
           >
-            Register
+            {loading ? "Loading..." : "Sign Up"}
           </a>
         </form>
       </div>

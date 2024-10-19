@@ -5,6 +5,7 @@ import SupplierManagementImg from "../../img/SupplierManagement.jpg";
 import { useAuth } from "../../components/AuthContext";
 import { supabase } from "../../config/supabaseClient";
 import UpdateModal from "../../components/UpdateModal";
+import toast from "react-hot-toast";
 
 function Suppliers() {
   const { user } = useAuth();
@@ -20,6 +21,7 @@ function Suppliers() {
   });
   const [suppliers, setSuppliers] = useState([]);
   const [loading, setLoading] = useState(true); // State to track loading
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchSuppliers();
@@ -29,6 +31,7 @@ function Suppliers() {
     e.preventDefault();
     if (validateForm()) {
       try {
+        setIsLoading(true);
         const { data, error } = await supabase
           .from("Supplier")
           .insert([{ ...formData, shopId: user.user.id }]);
@@ -41,9 +44,13 @@ function Suppliers() {
           contact: "",
           address: "",
         });
-        fetchSuppliers(); // Refresh the supplier list after insertion
+        toast.success("Supplier added successfully");
+        fetchSuppliers();
       } catch (error) {
         console.error("Error inserting data:", error.message);
+        toast.error("Error inserting data:");
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -83,15 +90,17 @@ function Suppliers() {
       if (error) {
         throw error;
       }
-      console.log("Supplier deleted successfully");
+      toast.success("Supplier deleted successfully");
       fetchSuppliers(); // Refresh the supplier list after deletion
     } catch (error) {
       console.error("Error deleting supplier:", error.message);
+      toast.error("Error deleting supplier:");
     }
   };
 
   const handleUpdate = async (updatedSupplier) => {
     try {
+      setIsLoading(true);
       const { data, error } = await supabase
         .from("Supplier")
         .update(updatedSupplier)
@@ -99,11 +108,14 @@ function Suppliers() {
       if (error) {
         throw error;
       }
-      alert("Data updated successfully:", data);
+      toast.success("Data updated successfully:");
       fetchSuppliers(); // Refresh the supplier list after update
       setLoading(false);
     } catch (error) {
       console.error("Error updating data:", error.message);
+      toast.error("Error updating data:");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -217,7 +229,7 @@ function Suppliers() {
                 <div className="invalid-feedback">{formErrors.address}</div>
               </div>
               <button type="submit" className="btn btn-primary">
-                Add Supplier
+                {isLoading ? "Adding Supplier..." : "Add Supplier"}
               </button>
             </form>
           </div>
@@ -264,6 +276,7 @@ function Suppliers() {
                         <UpdateModal
                           supplier={supplier}
                           onUpdate={handleUpdate}
+                          isLoading={isLoading}
                         />
                       </td>
                     </tr>

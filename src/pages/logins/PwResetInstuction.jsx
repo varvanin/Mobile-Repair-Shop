@@ -1,23 +1,31 @@
 import React, { useState } from "react";
 import "./Login.css";
 import { supabase } from "../../config/supabaseClient";
+import toast from "react-hot-toast";
 
 function PwResetInstuction() {
   const [email, setEmail] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   async function resetPw() {
     try {
+      setLoading(true);
       const { data, error } = await supabase.auth.resetPasswordForEmail(email);
       if (error) {
-        alert("Please Type a Valid Email Address", error);
+        toast.error("Please Type a Valid Email Address", error);
       } else {
-        alert("Check your inbox for password reset instruction");
+        toast.success("Check your inbox for password reset instruction");
       }
     } catch (error) {
       console.error(
         "There is a some kind of error on password reset process. Please wait a moment until we fix it ",
         error
       );
+      toast.error(
+        "There is a some kind of error on password reset process. Please wait a moment until we fix it "
+      );
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -56,7 +64,7 @@ function PwResetInstuction() {
             type="submit"
             className="btn btn-secondary ps-5 pe-5 me-3 d-inline  "
           >
-            Send instruction
+            {isLoading ? "Sending..." : "Send Instructions"}
           </button>
         </form>
       </div>

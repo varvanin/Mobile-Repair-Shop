@@ -10,6 +10,7 @@ import Suppliers from "./pages/suppliers/Suppliers";
 import SignUp from "./pages/logins/SignUp";
 import { useAuth } from "./components/AuthContext";
 import NotFound from "./pages/not-found/NotFound";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const { user } = useAuth();
@@ -42,6 +43,7 @@ function App() {
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Toaster />
       </BrowserRouter>
     </div>
   );

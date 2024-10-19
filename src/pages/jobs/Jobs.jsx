@@ -6,6 +6,7 @@ import "./Jobs.css";
 import { supabase } from "../../config/supabaseClient";
 import { useAuth } from "../../components/AuthContext";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 function Jobs() {
   const [formData, setFormData] = useState({
@@ -28,6 +29,7 @@ function Jobs() {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const [selectedJob, setSelectedJob] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -71,10 +73,12 @@ function Jobs() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const validationErrors = validateForm(formData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      setIsLoading(false);
       return;
     }
 
@@ -85,6 +89,8 @@ function Jobs() {
 
       if (error) {
         throw error;
+        console.log(error);
+        toast.error("Error adding job");
       }
 
       setFormData({
@@ -96,10 +102,13 @@ function Jobs() {
         charge: "",
       });
 
-      console.log("Data inserted successfully");
+      toast.success("Job added successfully");
       fetchJobs();
     } catch (error) {
       console.log(error.message);
+      toast.error("Error adding job");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -137,6 +146,8 @@ function Jobs() {
 
       if (error) {
         throw error;
+        toast.error("Error updating status");
+        console.log(error);
       }
 
       // Assuming you want to update the jobs state after successful update
@@ -148,9 +159,10 @@ function Jobs() {
       });
       setJobs(updatedJobs);
 
-      console.log("Status updated successfully");
+      toast.success("Status updated successfully");
     } catch (error) {
       console.error("Error updating status:", error.message);
+      toast.error("Error updating status");
     }
   };
 
@@ -160,15 +172,17 @@ function Jobs() {
       if (error) {
         throw error;
       }
-      console.log("Job deleted successfully");
+      toast.success("Job deleted successfully");
       fetchJobs();
     } catch (error) {
       console.error("Error deleting Job:", error.message);
+      toast.error("Error deleting job");
     }
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     // Validate form fields
     const validationErrors = validateForm(formData);
@@ -183,10 +197,11 @@ function Jobs() {
         .update(formData)
         .eq("id", selectedJob.id);
       if (error) {
+        console.log(error);
         throw error;
       }
 
-      console.log("Data updated successfully:");
+      toast.success("Data updated successfully:");
       setSelectedJob(null);
       setFormData({
         customerName: "",
@@ -199,6 +214,9 @@ function Jobs() {
       fetchJobs();
     } catch (error) {
       console.log(error);
+      toast.error("Error updating job");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -332,7 +350,7 @@ function Jobs() {
                 </div>
                 <div className="col-12">
                   <button type="submit" className="btn btn-primary ps-3 pe-3">
-                    Update
+                    {isLoading ? "Updating..." : "Update"}
                   </button>
                 </div>
               </form>
@@ -436,7 +454,7 @@ function Jobs() {
                 </div>
                 <div className="col-12">
                   <button type="submit" className="btn btn-primary ps-3 pe-3">
-                    Submit
+                    {isLoading ? "Adding..." : "Add"}
                   </button>
                 </div>
               </form>

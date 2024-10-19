@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function UpdateModal({ supplier, onUpdate }) {
+function UpdateModal({ supplier, onUpdate, isLoading }) {
   const [updatedSupplier, setUpdatedSupplier] = useState({ ...supplier });
   const [formErrors, setFormErrors] = useState({
     supplierName: "",
@@ -118,7 +118,7 @@ function UpdateModal({ supplier, onUpdate }) {
                 <div className="invalid-feedback">{formErrors.address}</div>
               </div>
               <button type="submit" className="btn btn-primary">
-                Update
+                {isLoading ? "Updating Supplier..." : "Update Supplier"}
               </button>
             </form>
           </div>
