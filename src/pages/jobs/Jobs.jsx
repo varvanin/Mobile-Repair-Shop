@@ -7,6 +7,7 @@ import { supabase } from "../../config/supabaseClient";
 import { useAuth } from "../../components/AuthContext";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import { sendSms } from "../../services/sms";
 
 function Jobs() {
   const [formData, setFormData] = useState({
@@ -103,6 +104,10 @@ function Jobs() {
       });
 
       toast.success("Job added successfully");
+      await sendSms(
+        `Dear ${formData.customerName} Your job has been added successfully`,
+        formData.contact
+      );
       fetchJobs();
     } catch (error) {
       console.log(error.message);
@@ -158,8 +163,12 @@ function Jobs() {
         return job;
       });
       setJobs(updatedJobs);
-
       toast.success("Status updated successfully");
+      const job = jobs.find((job) => job.id === jobId);
+      await sendSms(
+        `Dear ${job.customerName} Your job status of the ${job.deviceName}has been updated to ${newStatus}`,
+        job.contact
+      );
     } catch (error) {
       console.error("Error updating status:", error.message);
       toast.error("Error updating status");
