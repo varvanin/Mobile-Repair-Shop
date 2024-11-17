@@ -6,6 +6,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 REACT_APP_SUPABASE_URL
 REACT_APP_SUPABASE_KEY
+REACT_APP_API_KEY
 REACT_APP_USER_ID
 REACT_APP_SENDER_ID
 
