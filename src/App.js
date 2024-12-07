@@ -1,4 +1,5 @@
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
+import dotenv from 'dotenv';
 import Home from "./pages/home/Home";
 import Login from "./pages/logins/Login";
 import PwResetInstuction from "./pages/logins/PwResetInstuction";
@@ -11,6 +12,8 @@ import SignUp from "./pages/logins/SignUp";
 import { useAuth } from "./components/AuthContext";
 import NotFound from "./pages/not-found/NotFound";
 import { Toaster } from "react-hot-toast";
+
+dotenv.config()
 
 function App() {
   const { user } = useAuth();
@@ -50,3 +53,4 @@ function App() {
 }
 
 export default App;
+
